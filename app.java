@@ -162,7 +162,6 @@
  						for(int q=0; q<seleccion.size() && encontrado==false; q++){
  							if((seleccion.get(q).nombre()).compareTo(coincidente[0]) == 0){
  								encontrado=true;
- 								
  								asig=q;
  							}
 
