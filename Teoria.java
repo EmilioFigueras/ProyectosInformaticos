@@ -1,15 +1,17 @@
  public class Teoria{
  	//String codigoAsig_;
  	//private Asignatura asig_;
- 	private String grupo_;
+ 	private int id_;
+ 	private String nombre_grupo_;
  	private double hora_inicio_;
  	private double hora_fin_;
  	private int dia_; //0 = Lunes, 1 = Martes, 2 = Mier, 3 = Jueves, 4 = Viernes
 
- 	public Teoria(String grupo, double hora_inicio, double hora_fin, int dia){
+ 	public Teoria(int id, String nombre_grupo, double hora_inicio, double hora_fin, int dia){
  		//codigoAsig_ = codigoAsig_;
  		//asig_ = asig;
- 		grupo_ = grupo;
+ 		id_ = id;
+ 		nombre_grupo_ = nombre_grupo;
  		hora_inicio_ = hora_inicio;
  		hora_fin_ = hora_fin;
  		dia_ = dia;
@@ -28,12 +30,20 @@
  		return codigoAsig_;
  	}*/
 
- 	public String grupo(){
- 		return grupo_;
+ 	public String nombre(){
+ 		return nombre_grupo_;
  	}
  	/*public Asignatura asignatura(){
  		return asig_;
  	}*/
+
+ 	public int id(){
+ 		return id_;
+ 	}
+
+ 	public int dia(){
+ 		return dia_;
+ 	}
 
  	//Modificadores
  	public void hora_inicio(double hora_inicio){
@@ -49,8 +59,9 @@
  	}*/
 
  	public void grupo(String grupo){
- 		grupo_ = grupo;
+ 		nombre_grupo_ = grupo;
  	}
+
 
 
  }

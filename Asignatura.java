@@ -85,7 +85,7 @@ public class Asignatura{
 		return seminario_.get(gr).hora_inicio();
 	}
 
-	//Double? o tipo de dato que sea hora_fin en la clase Toeria/Pr/Sem
+    //Recibe la id del grupo
 	public double hora_fin_t(int gr){
 		return teoria_.get(gr).hora_fin();
 	}
@@ -97,6 +97,32 @@ public class Asignatura{
 	public double hora_fin_s(int gr){
 		return seminario_.get(gr).hora_fin();
 	}
+
+	public int dia_t(int gr){
+		return teoria_.get(gr).dia();
+	}
+
+	public int dia_p(int gr){
+		return practica_.get(gr).dia();
+	}
+
+	public int dia_s(int gr){
+		return seminario_.get(gr).dia();
+	}
+
+	public String nombre_grupo_t(int gr){
+		return teoria_.get(gr).nombre();
+	}
+
+	public String nombre_grupo_p(int gr){
+		return practica_.get(gr).nombre();
+	}
+
+	public String nombre_grupo_s(int gr){
+		return seminario_.get(gr).nombre();
+	}
+
+
 
 
 
