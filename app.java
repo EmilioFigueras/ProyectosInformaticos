@@ -54,7 +54,7 @@
  		String horario_resultado[][] = new String[24][5];
  		//Mostrar asignaturas
  		for(int i=0; i<todas_asig.size(); i++){
- 			todas_asig.get(i).nombre();
+ 			System.out.println(todas_asig.get(i).nombre());
  		}
 
 
