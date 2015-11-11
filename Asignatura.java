@@ -1,3 +1,6 @@
+ import java.util.*;
+
+
 public class Asignatura{
 	private String nombre_;
 	private String datos_;
@@ -5,36 +8,54 @@ public class Asignatura{
 	private ArrayList<Teoria> teoria_;
 	private ArrayList<Practica> practica_;
 	private ArrayList<Seminario> seminario_;
-	private Comentarios coment_;
+	private String coment_;
 
-	public Asignatura(String nombre, String datos, String tipo, ArrayList<Teoria> teoria, ArrayList<Practica> practica, ArrayList<Seminario> seminario, Comentarios coment){
+	public Asignatura(String nombre, String datos, String tipo, ArrayList<Teoria> teoria, ArrayList<Practica> practica, ArrayList<Seminario> seminario, String coment){
 		nombre_ = nombre;
 		datos_ = datos;
 		tipo_ = tipo;
-		teoria_ = new ArrayList<Teoria>;
-		teoria_ = teoria.clone();
-		practica_ = new ArrayList<Practica>;
-		practica_ = practica.clone();
-		seminario_ = new ArrayList<Seminario>;
-		seminario_ = seminario.clone();
+		teoria_ = new ArrayList<Teoria>();
+		for(int i=0; i<teoria.size(); i++)
+			teoria_.add(teoria.get(i));
+		practica_ = new ArrayList<Practica>();
+		for(int i=0; i<practica.size(); i++)
+			practica_.add(practica.get(i));
+		seminario_ = new ArrayList<Seminario>();
+		for(int i=0; i<seminario_.size(); i++)
+			seminario_.add(seminario.get(i));
+		coment_ = coment;
+
+	}
+
+	public Asignatura(String nombre, String datos, String tipo, ArrayList<Teoria> teoria, ArrayList<Practica> practica, String coment){
+		nombre_ = nombre;
+		datos_ = datos;
+		tipo_ = tipo;
+		teoria_ = new ArrayList<Teoria>();
+		for(int i=0; i<teoria.size(); i++)
+			teoria_.add(teoria.get(i));
+		practica_ = new ArrayList<Practica>();
+		for(int i=0; i<practica.size(); i++)
+			practica_.add(practica.get(i));
+		seminario_ = new ArrayList<Seminario>();
 		coment_ = coment;
 
 	}
 
 	//Devuelve el nombre de la asignatura
-	public String Nombre(){return nombre_;}
+	public String nombre(){return nombre_;}
 
-	public String Datos(){return datos_;}
+	public String datos(){return datos_;}
 
-	public String Tipo(){return tipo_;}
+	public String tipo(){return tipo_;}
 
-	public ArrayList<Teoria> Teoria(){return teoria_;}
+	public ArrayList<Teoria> teoria(){return teoria_;}
 
-	public ArrayList<Practica> Practica(){return practica_;}
+	public ArrayList<Practica> practica(){return practica_;}
 
-	public ArrayList<Seminario> Seminario(){return seminario_;}
+	public ArrayList<Seminario> seminario(){return seminario_;}
 
-	public Comentarios Comentario(){return coment_;}
+	public String comentario(){return coment_;}
 
 	//Devuelve el numero de grupos de teoria/practica/sem
 	public int grupos_teoria(){
@@ -74,7 +95,7 @@ public class Asignatura{
 	}
 
 	public double hora_fin_s(int gr){
-		return seminario_.get(gr).fin();
+		return seminario_.get(gr).hora_fin();
 	}
 
 
