@@ -291,12 +291,11 @@
 
 
  			
- 			if(entra_t && entra_s && entra_p) //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
+ 			if(entra_t && entra_s && entra_p){ //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
  				for(int j=0; j<24; j++)
  					for(int k=0; k<5; k++)
  						if(horario_previo[j][k]!=null){//Si hay algo escrito
  							horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
-
  							//Ahora eliminaremos TODAS las asignaciones de grupos sobreescritos
  							if(gru_t!=237){//Ha chocado algun grupo de teoria
  								if((horario_resultado[j][k].compareTo(seleccion.get(asig).nombre()+" "+seleccion.get(asig).nombre_grupo_t(gru_t))) == 0)
@@ -311,6 +310,10 @@
  									horario_resultado[j][k] = null;
  							}
  						}//fin if horario_previo != null
+ 			}else{ //fin if
+ 				System.out.println("La asignatura "+seleccion.get(i).nombre()+" no es compatible con el resto.");
+ 			}
+
 
  			//Ahora buscamos los grupos eliminados
 	 		if(asig!=-1){ //Si ha habido alguna asignatura que chocase
@@ -327,6 +330,7 @@
 
 
  		//Muestra de resultados
+ 		System.out.println();
  		for(int i=0; i<24; i++){
  			for(int j=0; j<5; j++){
  				System.out.print(horario_resultado[i][j]+"  ");
