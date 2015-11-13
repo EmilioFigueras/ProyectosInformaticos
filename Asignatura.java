@@ -21,7 +21,7 @@ public class Asignatura{
 		for(int i=0; i<practica.size(); i++)
 			practica_.add(practica.get(i));
 		seminario_ = new ArrayList<Seminario>();
-		for(int i=0; i<seminario_.size(); i++)
+		for(int i=0; i<seminario.size(); i++)
 			seminario_.add(seminario.get(i));
 		coment_ = coment;
 
