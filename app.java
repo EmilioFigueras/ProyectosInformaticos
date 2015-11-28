@@ -120,7 +120,7 @@
  			System.out.println();
  			System.out.println("Asignaturas disponibles: ");
  			for(int i=0; i<todas_asig.size(); i++){
- 				System.out.println((i+1)+".- "+todas_asig.get(i).nombre());
+ 				System.out.println((i+1)+".- "+todas_asig.get(i).get_nombre());
  			}
  			System.out.println("0.-Hecho.");
  			System.out.println("Seleccione la asignatura que mas le interese o pulse 0 para finalizar:");
@@ -165,7 +165,7 @@
  						String[] coincidente = horario_resultado[k][dia].split(" "); //coincidente[0] = nombre y coincidente[1] = grupo
  						encontrado = false;
  						for(int q=0; q<seleccion.size() && encontrado==false; q++){ //Bucle para encontrar la asignaura que nos choca
- 							if((seleccion.get(q).nombre()).compareTo(coincidente[0]) == 0){
+ 							if((seleccion.get(q).get_nombre()).compareTo(coincidente[0]) == 0){
  								encontrado=true;
  								asig=q; //Posicion en el ArrayList seleccion de la asignatura que nos choca
  							}
@@ -177,10 +177,10 @@
  						if(gr_coin>1){ //Si tiene mas de un grupo
  							for(int q=0; q<gr_coin; q++){
  								//Entreamos en asignaturas seleccionadas->Asignatura coincidente->ArrayList de Teoria->Y recorremos sus nombres
- 								if((seleccion.get(asig).teoria().get(q).nombre()).compareTo(coincidente[1]) == 0)
+ 								if((seleccion.get(asig).get_teoria().get(q).get_nombre()).compareTo(coincidente[1]) == 0)
  									gru_t=q;
  							}//fin for q
- 							horario_previo[k][dia]=seleccion.get(i).nombre()+" "+seleccion.get(i).nombre_grupo_t(j);
+ 							horario_previo[k][dia]=seleccion.get(i).get_nombre()+" "+seleccion.get(i).nombre_grupo_t(j);
 
  						}else //Si no tiene mas de un grupo, pues entonces la asignatura "i" no entra.
  							entra_t=false;
@@ -196,7 +196,7 @@
  				//Si hay espacio libre pues la agregamos a la matriz previa, a la espera de que haya espacio tambien para el resto de horas de este grupo
  				if(ocupado==false){
  					for(int k=hora_a_fila(seleccion.get(i).hora_inicio_t(j)); k<hora_a_fila(seleccion.get(i).hora_fin_t(j)); k++){
- 						horario_previo[k][dia]=seleccion.get(i).nombre()+" "+seleccion.get(i).nombre_grupo_t(j);
+ 						horario_previo[k][dia]=seleccion.get(i).get_nombre()+" "+seleccion.get(i).nombre_grupo_t(j);
  					}
  				}
  			}//fin for j
@@ -216,21 +216,23 @@
  						String[] coincidente = horario_resultado[k][dia].split(" "); //coincidente[0] = nombre y coincidente[1] = grupo
  						encontrado = false;
  						for(int q=0; q<seleccion.size() && encontrado==false; q++){
- 							if((seleccion.get(q).nombre()).compareTo(coincidente[0]) == 0){
+ 							if((seleccion.get(q).get_nombre()).compareTo(coincidente[0]) == 0){
  								encontrado=true;
  								asig=q;
  							}
 
  						}//fin for q
+ 						System.out.println("Nombre asig: "+seleccion.get(asig).get_nombre());
  						gr_coin = seleccion.get(asig).grupos_practica();
+ 						System.out.println("Grupos de practica: "+gr_coin);
  						//Ahora buscamos el grupo concreto que coincide
  						if(gr_coin>1){
  							for(int q=0; q<gr_coin; q++){
  								//Entreamos en asignaturas seleccionadas->Asignatura coincidente->ArrayList de Teoria->Y recorremos sus nombres
- 								if((seleccion.get(asig).practica().get(q).nombre()).compareTo(coincidente[1]) == 0)
+ 								if((seleccion.get(asig).get_practica().get(q).get_nombre()).compareTo(coincidente[1]) == 0)
  									gru_p=q;
  							}//fin for q
- 							horario_previo[k][dia]=seleccion.get(i).nombre()+" "+seleccion.get(i).nombre_grupo_p(j);
+ 							horario_previo[k][dia]=seleccion.get(i).get_nombre()+" "+seleccion.get(i).nombre_grupo_p(j);
 
  						}else //fin if gr_coin
  							entra_p=false;
@@ -239,7 +241,7 @@
  				}
  				if(ocupado==false){
  					for(int k=hora_a_fila(seleccion.get(i).hora_inicio_p(j)); k<hora_a_fila(seleccion.get(i).hora_fin_p(j)); k++){
- 						horario_previo[k][dia]=seleccion.get(i).nombre()+" "+seleccion.get(i).nombre_grupo_p(j);
+ 						horario_previo[k][dia]=seleccion.get(i).get_nombre()+" "+seleccion.get(i).nombre_grupo_p(j);
  					}
  				}
 
@@ -260,7 +262,7 @@
  						String[] coincidente = horario_resultado[k][dia].split(" "); //coincidente[0] = nombre y coincidente[1] = grupo
  						encontrado = false;
  						for(int q=0; q<seleccion.size() && encontrado==false; q++){
- 							if((seleccion.get(q).nombre()).compareTo(coincidente[0]) == 0){
+ 							if((seleccion.get(q).get_nombre()).compareTo(coincidente[0]) == 0){
  								encontrado=true;
  								asig=q;
  							}
@@ -271,10 +273,10 @@
  						if(gr_coin>1){
  							for(int q=0; q<gr_coin; q++){
  								//Entreamos en asignaturas seleccionadas->Asignatura coincidente->ArrayList de Teoria->Y recorremos sus nombres
- 								if((seleccion.get(asig).seminario().get(q).nombre()).compareTo(coincidente[1]) == 0)
+ 								if((seleccion.get(asig).get_seminario().get(q).get_nombre()).compareTo(coincidente[1]) == 0)
  									gru_s=q;
  							}//fin for q
- 							horario_previo[k][dia]=seleccion.get(i).nombre()+" "+seleccion.get(i).nombre_grupo_s(j);
+ 							horario_previo[k][dia]=seleccion.get(i).get_nombre()+" "+seleccion.get(i).nombre_grupo_s(j);
 
  						}else //fin if gr_coin
  							entra_s=false;
@@ -283,13 +285,21 @@
  				}
  				if(ocupado==false){
  					for(int k=hora_a_fila(seleccion.get(i).hora_inicio_s(j)); k<hora_a_fila(seleccion.get(i).hora_fin_s(j)); k++){
- 						horario_previo[k][dia]=seleccion.get(i).nombre()+" "+seleccion.get(i).nombre_grupo_s(j);
+ 						horario_previo[k][dia]=seleccion.get(i).get_nombre()+" "+seleccion.get(i).nombre_grupo_s(j);
  					}
  				}
  			}//fin for j
  			//FIN DEL ANALISIS DE LA ASIGNATURA "i".
 
-
+ 			//ERRORES
+ 			System.out.println();
+ 			for(int j=0; j<24; j++){
+ 				for(int k=0; k<5; k++){
+ 					System.out.print(horario_previo[j][k]+"  ");
+ 				}
+ 				System.out.println();
+ 			}
+ 			System.out.println("Teoria: "+entra_t+"  Sem: "+entra_s+"  Pra: "+entra_p); //BUSCANDO ERRORES
  			
  			if(entra_t && entra_s && entra_p){ //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
  				for(int j=0; j<24; j++)
@@ -298,32 +308,33 @@
  							horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
  							//Ahora eliminaremos TODAS las asignaciones de grupos sobreescritos
  							if(gru_t!=237){//Ha chocado algun grupo de teoria
- 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).nombre()+" "+seleccion.get(asig).nombre_grupo_t(gru_t))) == 0)
+ 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).get_nombre()+" "+seleccion.get(asig).nombre_grupo_t(gru_t))) == 0)
  									horario_resultado[j][k] = null;
  							}
  							if(gru_p!=237){//Ha chocado algun grupo de teoria
- 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).nombre()+" "+seleccion.get(asig).nombre_grupo_p(gru_p))) == 0)
+ 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).get_nombre()+" "+seleccion.get(asig).nombre_grupo_p(gru_p))) == 0)
  									horario_resultado[j][k] = null;
  							}
  							if(gru_s!=237){//Ha chocado algun grupo de teoria
- 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).nombre()+" "+seleccion.get(asig).nombre_grupo_s(gru_s))) == 0)
+ 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).get_nombre()+" "+seleccion.get(asig).nombre_grupo_s(gru_s))) == 0)
  									horario_resultado[j][k] = null;
  							}
  						}//fin if horario_previo != null
+ 				if(asig!=-1){ //Si ha habido alguna asignatura que chocase
+	 			if(gru_t!=237) //Si ha chocado algun grupo de teoria
+	 				seleccion.get(asig).get_teoria().remove(gru_t);
+	 			if(gru_p!=237) //Si ha chocado algun grupo de practicas
+	 				seleccion.get(asig).get_practica().remove(gru_p);
+	 			if(gru_s!=237) //Si ha chocado algun grupo de seminario
+	 				seleccion.get(asig).get_seminario().remove(gru_s);
+	 		}
  			}else{ //fin if
- 				System.out.println("La asignatura "+seleccion.get(i).nombre()+" no es compatible con el resto.");
+ 				System.out.println("La asignatura "+seleccion.get(i).get_nombre()+" no es compatible con el resto.");
  			}
 
-
+ 			System.out.println("Asig="+asig);
  			//Ahora buscamos los grupos eliminados
-	 		if(asig!=-1){ //Si ha habido alguna asignatura que chocase
-	 			if(gru_t!=237) //Si ha chocado algun grupo de teoria
-	 				seleccion.get(asig).teoria().remove(gru_t);
-	 			if(gru_p!=237) //Si ha chocado algun grupo de practicas
-	 				seleccion.get(asig).practica().remove(gru_p);
-	 			if(gru_s!=237) //Si ha chocado algun grupo de seminario
-	 				seleccion.get(asig).seminario().remove(gru_s);
-	 		}
+	 		
 	 		//Esto lo hacemos para que la sobreescritura en caso de que haya mas de un grupo de la asignatura "i" (la que se analiza)
 	 		//tenga sentido. Es decir, la variable gr_coin y su uso tenga utilidad.
  		}//fin for i

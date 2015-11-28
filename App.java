@@ -89,7 +89,8 @@
  		practica_in.add(p_in_1);
  		Practica p_in_2 = new Practica(1, "C2", 15.50, 18.00, 4); //Coincide con DA C3
  		practica_in.add(p_in_2);
- 		Practica p_in_3 = new Practica(2, "C3", 16.50, 19.00, 1); //Coincide con DA C1
+ 		//Practica p_in_3 = new Practica(2, "C3", 16.50, 19.00, 1); //Coincide con DA C1
+ 		//practica_in.add(p_in_3);
 
  		Asignatura in = new Asignatura("INV", "url", "Optativa", teoria_in, practica_in, "sin comentarios");
  		//Otras asignaturas...
@@ -122,7 +123,7 @@
  			System.out.println();
  			System.out.println("Asignaturas disponibles: ");
  			for(int i=0; i<todas_asig.size(); i++){
- 				System.out.println((i+1)+".- "+todas_asig.get(i).nombre());
+ 				System.out.println((i+1)+".- "+todas_asig.get(i).get_nombre());
  			}
  			System.out.println("0.-Hecho.");
  			System.out.println("Seleccione la asignatura que mas le interese o pulse 0 para finalizar:");
@@ -141,12 +142,18 @@
  		//Recorremos todas las asignaturas
  		for(int i=0; i<seleccion.size(); i++){ //Bucle para recorrer la asignaturas seleccionadas
 
+ 			//Pasamos el resultado obtenido hasta ahora a la matriz previa que sera la que vamos a ir modificando
+ 			//Las funciones para copiar matriz copian la posicion de memoria, por lo que hay que copiarla con bucle :=(
+ 			for(int j=0; j<24; j++)
+ 				for(int q=0; q<5; q++)
+ 					horario_previo[j][q]=horario_resultado[j][q];
+ 			
  			gruposCompatibles = new GruposCompatibles(seleccion,seleccion.get(i));
- 			entra_t = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).teoria());
+ 			entra_t = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_teoria());
  			gru_t = gruposCompatibles.getGru();
- 			entra_p = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).practica());
+ 			entra_p = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_practica());
  			gru_p = gruposCompatibles.getGru();
- 			entra_s = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).seminario());
+ 			entra_s = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_seminario());
  			gru_s = gruposCompatibles.getGru();
  			asig = gruposCompatibles.getAsig();
 
@@ -158,37 +165,36 @@
  							horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
  							//Ahora eliminaremos TODAS las asignaciones de grupos sobreescritos
  							if(gru_t!=237){//Ha chocado algun grupo de teoria
- 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).nombre()+" "+seleccion.get(asig).nombre_grupo_t(gru_t))) == 0)
+ 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).get_nombre()+" "+seleccion.get(asig).nombre_grupo_t(gru_t))) == 0)
  									horario_resultado[j][k] = null;
  							}
  							if(gru_p!=237){//Ha chocado algun grupo de teoria
- 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).nombre()+" "+seleccion.get(asig).nombre_grupo_p(gru_p))) == 0)
+ 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).get_nombre()+" "+seleccion.get(asig).nombre_grupo_p(gru_p))) == 0)
  									horario_resultado[j][k] = null;
  							}
  							if(gru_s!=237){//Ha chocado algun grupo de teoria
- 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).nombre()+" "+seleccion.get(asig).nombre_grupo_s(gru_s))) == 0)
+ 								if((horario_resultado[j][k].compareTo(seleccion.get(asig).get_nombre()+" "+seleccion.get(asig).nombre_grupo_s(gru_s))) == 0)
  									horario_resultado[j][k] = null;
  							}
  						}//fin if horario_previo != null
- 			}else{ //fin if
- 				System.out.println("La asignatura "+seleccion.get(i).nombre()+" no es compatible con el resto.");
- 			}
-
-
- 			//Ahora buscamos los grupos eliminados
-	 		if(asig!=-1){ //Si ha habido alguna asignatura que chocase
-	 			if(gru_t!=237) //Si ha chocado algun grupo de teoria
-	 				seleccion.get(asig).teoria().remove(gru_t);
-	 			if(gru_p!=237) //Si ha chocado algun grupo de practicas
-	 				seleccion.get(asig).practica().remove(gru_p);
-	 			if(gru_s!=237) //Si ha chocado algun grupo de seminario
-	 				seleccion.get(asig).seminario().remove(gru_s);
-	 		}
+ 				if(asig!=-1){ //Si ha habido alguna asignatura que chocase
+	 				if(gru_t!=237) //Si ha chocado algun grupo de teoria
+	 					seleccion.get(asig).get_teoria().remove(gru_t);
+	 				if(gru_p!=237) //Si ha chocado algun grupo de practicas
+	 					seleccion.get(asig).get_practica().remove(gru_p);
+	 				if(gru_s!=237) //Si ha chocado algun grupo de seminario
+	 					seleccion.get(asig).get_seminario().remove(gru_s);
+	 			}//fin if asig!=-1
 	 		//Esto lo hacemos para que la sobreescritura en caso de que haya mas de un grupo de la asignatura "i" (la que se analiza)
 	 		//tenga sentido. Es decir, la variable gr_coin y su uso tenga utilidad.
+ 			}else{ //fin if
+ 				System.out.println("La asignatura "+seleccion.get(i).get_nombre()+" no es compatible con el resto.");
+ 			}
+	 		
  		}//fin for i
 
 
+ 		
  		//Muestra de resultados
  		System.out.println();
  		for(int i=0; i<24; i++){

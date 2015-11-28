@@ -43,19 +43,19 @@ public class Asignatura{
 	}
 
 	//Devuelve el nombre de la asignatura
-	public String nombre(){return nombre_;}
+	public String get_nombre(){return nombre_;}
 
-	public String datos(){return datos_;}
+	public String get_datos(){return datos_;}
 
-	public String tipo(){return tipo_;}
+	public String get_tipo(){return tipo_;}
 
-	public ArrayList<Teoria> teoria(){return teoria_;}
+	public ArrayList<Teoria> get_teoria(){return teoria_;}
 
-	public ArrayList<Practica> practica(){return practica_;}
+	public ArrayList<Practica> get_practica(){return practica_;}
 
-	public ArrayList<Seminario> seminario(){return seminario_;}
+	public ArrayList<Seminario> get_seminario(){return seminario_;}
 
-	public String comentario(){return coment_;}
+	public String get_comentario(){return coment_;}
 
 	//Devuelve el numero de grupos de teoria/practica/sem
 	public int grupos_teoria(){
@@ -74,52 +74,52 @@ public class Asignatura{
 	//Double?? O tipo de dato que sea hora_comienzo en la clase Teoria
 	//Indica la hora de comienzo del grupo "gr" (empieza en 0)
 	public double hora_inicio_t(int gr){
-		return teoria_.get(gr).hora_inicio();
+		return teoria_.get(gr).get_hora_inicio();
 	}
 
 	public double hora_inicio_p(int gr){
-		return practica_.get(gr).hora_inicio();
+		return practica_.get(gr).get_hora_inicio();
 	}
 
 	public double hora_inicio_s(int gr){
-		return seminario_.get(gr).hora_inicio();
+		return seminario_.get(gr).get_hora_inicio();
 	}
 
     //Recibe la id del grupo
 	public double hora_fin_t(int gr){
-		return teoria_.get(gr).hora_fin();
+		return teoria_.get(gr).get_hora_fin();
 	}
 
 	public double hora_fin_p(int gr){
-		return practica_.get(gr).hora_fin();
+		return practica_.get(gr).get_hora_fin();
 	}
 
 	public double hora_fin_s(int gr){
-		return seminario_.get(gr).hora_fin();
+		return seminario_.get(gr).get_hora_fin();
 	}
 
 	public int dia_t(int gr){
-		return teoria_.get(gr).dia();
+		return teoria_.get(gr).get_dia();
 	}
 
 	public int dia_p(int gr){
-		return practica_.get(gr).dia();
+		return practica_.get(gr).get_dia();
 	}
 
 	public int dia_s(int gr){
-		return seminario_.get(gr).dia();
+		return seminario_.get(gr).get_dia();
 	}
 
 	public String nombre_grupo_t(int gr){
-		return teoria_.get(gr).nombre();
+		return teoria_.get(gr).get_nombre();
 	}
 
 	public String nombre_grupo_p(int gr){
-		return practica_.get(gr).nombre();
+		return practica_.get(gr).get_nombre();
 	}
 
 	public String nombre_grupo_s(int gr){
-		return seminario_.get(gr).nombre();
+		return seminario_.get(gr).get_nombre();
 	}
 
 
