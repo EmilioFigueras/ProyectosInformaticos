@@ -5,12 +5,14 @@ public class GruposCompatibles{
 	private ArrayList<Asignatura> seleccion;
 	private Asignatura asignatura;
 	private int asig, gru, dia;
-	private boolean encontrado,compatible = true, ocupado = false;
+	private boolean encontrado,compatible, ocupado;
 
 	public GruposCompatibles(ArrayList<Asignatura> seleccion, Asignatura asignatura){
 		this.seleccion = new ArrayList<Asignatura>(seleccion);
 		this.asignatura = asignatura;
 		asig = -1;
+		compatible = true;
+		ocupado = false;
 		//gru = 237;
 	}
 
@@ -31,16 +33,23 @@ public class GruposCompatibles{
 		//gr_coin = seleccion.get(asig).grupos_teoria(); //Numeros de grupos de la asignatura que nos choca
 
 		//Ahora buscamos el grupo concreto que coincide
-		if(gruposConCoincidencia.size()>1){ //Si tiene mas de un grupo
+		if(gruposConCoincidencia.size()>1 || grupos.size()>1){ //Si tiene mas de un grupo
 			for(int q=0; q<gruposConCoincidencia.size(); q++){
 				//Entreamos en asignaturas seleccionadas->Asignatura coincidente->ArrayList de Teoria->Y recorremos sus nombres
 				if((gruposConCoincidencia.get(q).get_nombre()).compareTo(coincidente[1]) == 0)
 					gru = q;
 			}//fin for q
-			horario_previo[k][dia] = asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
+			if(gruposConCoincidencia.size()>1)
+				horario_previo[k][dia] = asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
 
 		}else //Si no tiene mas de un grupo, pues entonces la asignatura "i" no entra.
-			compatible=false;
+			//BUSCANDO EL ERROR
+			if(gruposConCoincidencia.size()==1){
+				compatible=false;
+				System.out.println("No es compatible "+asignatura.get_nombre()+" "+gruposConCoincidencia.get(0).get_nombre());
+
+			}
+				//compatible=false;
 
 		ocupado = true;
 		//Ocupado = true porque si puede sobreescribirse la asignatura ya lo habra hecho anteriormente, y si no puede sobreescribirse, 

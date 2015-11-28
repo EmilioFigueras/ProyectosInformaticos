@@ -16,6 +16,49 @@
  		return (int)(2*(hora-8.5));
  	}
 
+ 	//Convierte un dia en valor de valor numero a un dia en String
+ 	public static String dia_a_string(int dia){
+ 		String dia_res;
+ 		switch(dia){
+ 			case 0:{
+ 				dia_res = "Lunes";
+ 				break;
+ 			}
+ 			case 1:{
+ 				dia_res = "Martes";
+ 				break;
+ 			}
+ 			case 2:{
+ 				dia_res = "Miércoles";
+ 				break;
+ 			}
+ 			case 3:{
+ 				dia_res = "Jueves";
+ 				break;
+ 			}
+ 			case 4:{
+ 				dia_res = "Viernes";
+ 				break;
+ 			}
+ 			default:{
+ 				dia_res = "Error";
+ 				break;
+ 			}
+ 		}
+ 		return dia_res;
+ 	}
+
+ 	//Convierte nuestro valor numero de las hora a una hora en String
+ 	public static String hora_a_string(double hora){
+ 		int hora_int = (int) hora;
+ 		String hora_final;
+ 		if((hora-hora_int) == 0) //Si la hora es en punto
+ 			hora_final = hora+":00";
+ 		else //Si es y media
+ 			hora_final = hora+":30";
+ 		return hora_final;
+ 	}
+
  	public static void main(String[] args){
  		//Simulacion de datos de la base de datos
 
@@ -84,6 +127,10 @@
  		ArrayList<Teoria> teoria_in = new ArrayList<Teoria>();
  		Teoria t_in_1 = new Teoria(0, "A1", 16.00, 18.00, 0); //Coincide con IISS
  		teoria_in.add(t_in_1);
+ 		Teoria t_in_2 = new Teoria(1, "A2", 9.00, 11.50, 4); //Viernes por la manana
+ 		teoria_in.add(t_in_2);
+ 		Teoria t_in_3 = new Teoria(2, "A3", 8.50, 10.50, 3);
+ 		teoria_in.add(t_in_3);
  		ArrayList<Practica> practica_in = new ArrayList<Practica>();
  		Practica p_in_1 = new Practica(0, "C1", 18.00, 20.50, 0); //Coincide con IISS
  		practica_in.add(p_in_1);
@@ -157,13 +204,24 @@
  			gru_s = gruposCompatibles.getGru();
  			asig = gruposCompatibles.getAsig();
 
- 			
+ 			System.out.println();
+ 				for(int k=0; k<24; k++){
+ 					for(int j=0; j<5; j++){
+ 						System.out.print(horario_previo[k][j]+"  ");
+ 					}
+ 					System.out.println();
+ 				}
+
+ 			//ERROR?
+ 			System.out.println("Teoria: "+entra_t+" Sem: "+entra_s+" Prac: "+entra_p);
+
  			if(entra_t && entra_s && entra_p){ //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
  				for(int j=0; j<24; j++)
  					for(int k=0; k<5; k++)
  						if(horario_previo[j][k]!=null){//Si hay algo escrito
  							horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
  							//Ahora eliminaremos TODAS las asignaciones de grupos sobreescritos
+ 							/*
  							if(gru_t!=237){//Ha chocado algun grupo de teoria
  								if((horario_resultado[j][k].compareTo(seleccion.get(asig).get_nombre()+" "+seleccion.get(asig).nombre_grupo_t(gru_t))) == 0)
  									horario_resultado[j][k] = null;
@@ -176,6 +234,7 @@
  								if((horario_resultado[j][k].compareTo(seleccion.get(asig).get_nombre()+" "+seleccion.get(asig).nombre_grupo_s(gru_s))) == 0)
  									horario_resultado[j][k] = null;
  							}
+ 							*/
  						}//fin if horario_previo != null
  				if(asig!=-1){ //Si ha habido alguna asignatura que chocase
 	 				if(gru_t!=237) //Si ha chocado algun grupo de teoria
@@ -193,7 +252,33 @@
 	 		
  		}//fin for i
 
+ 		//Comprobamos si hay diferente opciones validas de cada grupo y le pregunta al usuario cual prefiere
+ 		
+ 		/*for(int i=0; i<seleccion.size(); i++){
+ 			//Teoria
+ 			if(seleccion.get(i).grupos_teoria() > 1){
+ 				System.out.println("Seleccione el grupo de teoria que desee de la asignatura "+seleccion.get(i).get_nombre());
+ 				for(int j=0; j<seleccion.get(i).grupos_teoria(); j++){
+ 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_t(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_t(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_t(j))+" horas.");
+ 				}
+ 			}
 
+ 			//Seminario
+ 			if(seleccion.get(i).grupos_seminario() > 1){
+ 				System.out.println("Seleccione el grupo de teoria que desee de la asignatura "+seleccion.get(i).get_nombre());
+ 				for(int j=0; j<seleccion.get(i).grupos_seminario(); j++){
+ 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_s(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_s(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_s(j))+" horas.");
+ 				}
+ 			}
+
+ 			//Practica
+ 			if(seleccion.get(i).grupos_practica() > 1){
+ 				System.out.println("Seleccione el grupo de teoria que desee de la asignatura "+seleccion.get(i).get_nombre());
+ 				for(int j=0; j<seleccion.get(i).grupos_practica(); j++){
+ 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_p(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_p(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_p(j))+" horas.");
+ 				}
+ 			}
+ 		}*/
  		
  		//Muestra de resultados
  		System.out.println();
