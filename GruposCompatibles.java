@@ -4,7 +4,7 @@ public class GruposCompatibles{
 
 	private ArrayList<Asignatura> seleccion;
 	private Asignatura asignatura;
-	private int asig, gru, dia;
+	private int asig, gru, gru2, dia;
 	private boolean encontrado,compatible, ocupado;
 
 	public GruposCompatibles(ArrayList<Asignatura> seleccion, Asignatura asignatura){
@@ -19,6 +19,8 @@ public class GruposCompatibles{
 	public int getAsig(){return asig;}
 
 	public int getGru(){return gru;}
+
+	public int getGru2(){return gru2;}
 
 	public static double fila_a_hora(int n){
  		//n+8.5-n*0.5
@@ -36,20 +38,20 @@ public class GruposCompatibles{
 		if(gruposConCoincidencia.size()>1 || grupos.size()>1){ //Si tiene mas de un grupo
 			for(int q=0; q<gruposConCoincidencia.size(); q++){
 				//Entreamos en asignaturas seleccionadas->Asignatura coincidente->ArrayList de Teoria->Y recorremos sus nombres
-				if((gruposConCoincidencia.get(q).get_nombre()).compareTo(coincidente[1]) == 0)
+				if((gruposConCoincidencia.get(q).get_nombre()).compareTo(coincidente[1]) == 0){
 					gru = q;
+				}
 			}//fin for q
-			if(gruposConCoincidencia.size()>1)
+			if(gruposConCoincidencia.size()>1) //Si el grupo que esta ya puesto tiene otra opcion, lo sobreescribimos
 				horario_previo[k][dia] = asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
+			else{ //Si no tiene otra opcion, volvemos a poner gru como que no concuerda
+				gru = 237;
+				gru2 = j; //Indicamos que en gru2 el grupo que sobra de la asignatura que estamos analizando
+			}
 
 		}else //Si no tiene mas de un grupo, pues entonces la asignatura "i" no entra.
-			//BUSCANDO EL ERROR
-			if(gruposConCoincidencia.size()==1){
+			if(gruposConCoincidencia.size()==1)
 				compatible=false;
-				System.out.println("No es compatible "+asignatura.get_nombre()+" "+gruposConCoincidencia.get(0).get_nombre());
-
-			}
-				//compatible=false;
 
 		ocupado = true;
 		//Ocupado = true porque si puede sobreescribirse la asignatura ya lo habra hecho anteriormente, y si no puede sobreescribirse, 
@@ -60,6 +62,7 @@ public class GruposCompatibles{
 	public boolean sonCompatibles(String[][] horario_previo, String[][] horario_resultado, ArrayList<? extends Grupo> grupos){
 		
 		gru = 237;
+		gru2 = 237;
 
 		for(int j=0; j<grupos.size(); j++){ //Bucle para recorrer los grupos de teoria dentro de la asignatura seleccionada
 		 				ocupado=false;
