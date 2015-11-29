@@ -187,7 +187,9 @@
 
  		//Ya tenemos todas las asignaturas que el usuario ha seleccionado en el ArrayList seleccion
  		//Recorremos todas las asignaturas
- 		for(int i=0; i<seleccion.size(); i++){ //Bucle para recorrer la asignaturas seleccionadas
+ 		int i=0;
+ 		//for(int i=0; i<seleccion.size(); i++){ //Bucle para recorrer la asignaturas seleccionadas
+ 		while(i<seleccion.size()){ //Bucle para recorrer la asignaturas seleccionadas
 
  			//Pasamos el resultado obtenido hasta ahora a la matriz previa que sera la que vamos a ir modificando
  			//Las funciones para copiar matriz copian la posicion de memoria, por lo que hay que copiarla con bucle :=(
@@ -204,6 +206,7 @@
  			gru_s = gruposCompatibles.getGru();
  			asig = gruposCompatibles.getAsig();
 
+ 			/*BUSCANDO ERRORES
  			System.out.println();
  				for(int k=0; k<24; k++){
  					for(int j=0; j<5; j++){
@@ -214,6 +217,7 @@
 
  			//ERROR?
  			System.out.println("Teoria: "+entra_t+" Sem: "+entra_s+" Prac: "+entra_p);
+			*/
 
  			if(entra_t && entra_s && entra_p){ //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
  				for(int j=0; j<24; j++)
@@ -246,44 +250,80 @@
 	 			}//fin if asig!=-1
 	 		//Esto lo hacemos para que la sobreescritura en caso de que haya mas de un grupo de la asignatura "i" (la que se analiza)
 	 		//tenga sentido. Es decir, la variable gr_coin y su uso tenga utilidad.
+
+	 		i++; //Si añadimos la asginaturas, incrementamos i para que pase a la siguiente
  			}else{ //fin if
  				System.out.println("La asignatura "+seleccion.get(i).get_nombre()+" no es compatible con el resto.");
+ 				seleccion.remove(i); //Si no añadimos la asignatura, la borramos de la seleccion y no hace falta incrementar para pasar a la siguiente
  			}
 	 		
  		}//fin for i
 
+ 		System.out.println("Este es el horario provisional: ");
+ 		//Muestra de resultados provisionales
+ 		System.out.println();
+ 		for(i=0; i<24; i++){
+ 			for(int j=0; j<5; j++){
+ 				System.out.print(horario_resultado[i][j]+"  ");
+ 			}
+ 			System.out.println();
+ 		}
+
+ 		System.out.println("Ahora vamos a elegir entre las distintas opciones posibles. ");
  		//Comprobamos si hay diferente opciones validas de cada grupo y le pregunta al usuario cual prefiere
- 		
- 		/*for(int i=0; i<seleccion.size(); i++){
+ 		int j;
+ 		for(i=0; i<seleccion.size(); i++){
  			//Teoria
  			if(seleccion.get(i).grupos_teoria() > 1){
  				System.out.println("Seleccione el grupo de teoria que desee de la asignatura "+seleccion.get(i).get_nombre());
- 				for(int j=0; j<seleccion.get(i).grupos_teoria(); j++){
+ 				for(j=0; j<seleccion.get(i).grupos_teoria(); j++){
  					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_t(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_t(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_t(j))+" horas.");
  				}
- 			}
+ 				opc = sc.nextInt();
+ 				while(j<seleccion.get(i).grupos_teoria()){
+ 					if(j!=(opc-1))
+ 						seleccion.get(i).get_teoria().remove(j);
+ 					else
+ 						j++;
+ 				}//fin while
+ 			}//fin if
 
  			//Seminario
  			if(seleccion.get(i).grupos_seminario() > 1){
- 				System.out.println("Seleccione el grupo de teoria que desee de la asignatura "+seleccion.get(i).get_nombre());
- 				for(int j=0; j<seleccion.get(i).grupos_seminario(); j++){
+ 				System.out.println("Seleccione el grupo de seminario que desee de la asignatura "+seleccion.get(i).get_nombre());
+ 				for(j=0; j<seleccion.get(i).grupos_seminario(); j++){
  					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_s(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_s(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_s(j))+" horas.");
  				}
- 			}
+ 				opc = sc.nextInt();
+ 				while(j<seleccion.get(i).grupos_seminario()){
+ 					if(j!=(opc-1))
+ 						seleccion.get(i).get_seminario().remove(j);
+ 					else
+ 						j++;
+ 				}//fin while
+ 			}//fin if
 
  			//Practica
  			if(seleccion.get(i).grupos_practica() > 1){
- 				System.out.println("Seleccione el grupo de teoria que desee de la asignatura "+seleccion.get(i).get_nombre());
- 				for(int j=0; j<seleccion.get(i).grupos_practica(); j++){
+ 				System.out.println("Seleccione el grupo de practica que desee de la asignatura "+seleccion.get(i).get_nombre());
+ 				for(j=0; j<seleccion.get(i).grupos_practica(); j++){
  					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_p(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_p(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_p(j))+" horas.");
  				}
- 			}
- 		}*/
+ 				opc = sc.nextInt();
+ 				while(j<seleccion.get(i).grupos_practica()){
+ 					if(j!=(opc-1))
+ 						seleccion.get(i).get_practica().remove(j);
+ 					else
+ 						j++;
+ 				}//fin while
+ 			}//fin if
+ 		}
  		
+ 		System.out.println("Este es tu horario final: ");
  		//Muestra de resultados
  		System.out.println();
- 		for(int i=0; i<24; i++){
- 			for(int j=0; j<5; j++){
+ 		for(i=0; i<24; i++){
+ 			for(j=0; j<5; j++){
  				System.out.print(horario_resultado[i][j]+"  ");
  			}
  			System.out.println();
