@@ -5,7 +5,7 @@
  public class App{
 
  	static GruposCompatibles gruposCompatibles;
-
+ 	static Scanner sc = new Scanner(System.in);
  	//funcion que convierte una fila en una hora
  	//Recibe fila (de 0 a 24) y devuelve una hora
  	public static double fila_a_hora(int n){
@@ -62,7 +62,7 @@
  	public static void main(String[] args){
  		//Simulacion de datos de la base de datos
 
- 		Scanner sc = new Scanner(System.in);
+ 		
  		int dia; //Dia del 0 al 4 en el que tiene lugar la clase indicada
  		int asig; //Posocion en el arraylist "seleccion" de la asignatura coincidente.
  		int gru_t; //Posocion en el arraylist "seleccion" del grupo de teoria de la asignatura coincidente.
@@ -252,13 +252,33 @@
  		//SELECCION POR PARTE DEL USUARIO
  		System.out.println("Ahora vamos a elegir entre las distintas opciones posibles. ");
  		//Comprobamos si hay diferente opciones validas de cada grupo y le pregunta al usuario cual prefiere
- 		for(i=0; i<seleccion.size(); i++){ //Recorremos las asignaturas que son compatibles entre ellas.
+ 		for(i=0; i<seleccion.size(); i++) //Recorremos las asignaturas que son compatibles entre ellas.
+ 			seleccionar_grupo(i, seleccion, horario_resultado);
+
+
+ 		//MUESTRA FINAL
+ 		System.out.println("Este es tu horario final: ");
+ 		//Muestra de resultados
+ 		System.out.println();
+ 		for(i=0; i<24; i++){
+ 			for(int j=0; j<5; j++){
+ 				System.out.print(horario_resultado[i][j]+"  ");
+ 			}
+ 			System.out.println();
+ 		}
+
+ 	}//fin main
+ 	
+ 	
+ 	public static void seleccionar_grupo(int i, ArrayList<Asignatura> seleccion, String[][] horario_resultado){
+ 			int opc;
  			//Teoria
  			if(seleccion.get(i).grupos_teoria() > 1){ //Recorremos los grupos de teoria que tengan mas de una opciones disponible
  				//Le mostramos al usuario los grupos disponibles y esperamos a que elija uno
  				System.out.println("Seleccione el grupo de teoria que desee de la asignatura "+seleccion.get(i).get_nombre());
  				for(int j=0; j<seleccion.get(i).grupos_teoria(); j++){
- 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_t(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_t(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_t(j))+" horas.");
+ 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_t(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_t(j))
+ 						+" horas a "+hora_a_string(seleccion.get(i).hora_fin_t(j))+" horas.");
  				}
  				opc = sc.nextInt();
 
@@ -275,7 +295,8 @@
  				//Le mostramos al usuario los grupos disponibles y esperamos a que elija uno
  				System.out.println("Seleccione el grupo de seminario que desee de la asignatura "+seleccion.get(i).get_nombre());
  				for(int j=0; j<seleccion.get(i).grupos_seminario(); j++){
- 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_s(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_s(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_s(j))+" horas.");
+ 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_s(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_s(j))
+ 						+" horas a "+hora_a_string(seleccion.get(i).hora_fin_s(j))+" horas.");
  				}
  				opc = sc.nextInt();
 
@@ -291,7 +312,8 @@
  				//Le mostramos al usuario los grupos disponibles y esperamos a que elija uno
  				System.out.println("Seleccione el grupo de practica que desee de la asignatura "+seleccion.get(i).get_nombre());
  				for(int j=0; j<seleccion.get(i).grupos_practica(); j++){
- 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_p(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_p(j))+" horas a "+hora_a_string(seleccion.get(i).hora_fin_p(j))+" horas.");
+ 					System.out.println(+(j+1)+".- "+dia_a_string(seleccion.get(i).dia_p(j))+" de "+hora_a_string(seleccion.get(i).hora_inicio_p(j))
+ 						+" horas a "+hora_a_string(seleccion.get(i).hora_fin_p(j))+" horas.");
  				}
  				opc = sc.nextInt();
 
@@ -301,19 +323,5 @@
  						for(int k=hora_a_fila(seleccion.get(i).hora_inicio_p(j)); k<hora_a_fila(seleccion.get(i).hora_fin_p(j)); k++)
  							horario_resultado[k][seleccion.get(i).dia_p(j)] = null;
  			}//fin if
- 		}
-
-
- 		//MUESTRA FINAL
- 		System.out.println("Este es tu horario final: ");
- 		//Muestra de resultados
- 		System.out.println();
- 		for(i=0; i<24; i++){
- 			for(int j=0; j<5; j++){
- 				System.out.print(horario_resultado[i][j]+"  ");
- 			}
- 			System.out.println();
- 		}
-
- 	}//fin main
+ 	}//fin funcion
  }
