@@ -214,7 +214,6 @@
  					for(int k=0; k<5; k++)
  						if(horario_previo[j][k]!=null)
  							horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
- 				System.out.println("Asignatura: "+seleccion.get(i).get_nombre()+"  asig == "+asig+"  gru_p=="+gru_p);
  				if(asig!=-1){ //Si ha habido alguna asignatura que chocase
 	 				if(gru_t!=237) //Si ha chocado algun grupo de teoria
 	 					seleccion.get(asig).get_teoria().remove(gru_t);
@@ -240,12 +239,6 @@
 	 		
  		}//fin for i
 
- 		for(i=0; i<seleccion.size(); i++){
- 			System.out.println("Asignatura: "+seleccion.get(i).get_nombre());
- 			for(int j=0; j<seleccion.get(i).grupos_practica(); j++){
- 				System.out.println("Grupo: "+seleccion.get(i).nombre_grupo_p(j));
- 			}
- 		}
  		System.out.println("Este es el horario provisional: ");
  		//Muestra de resultados provisionales
  		System.out.println();
