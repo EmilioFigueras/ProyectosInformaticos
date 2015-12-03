@@ -9,7 +9,7 @@
  	static Scanner sc = new Scanner(System.in);
  	
  	//Vector con los nombre de los dias de la semana
- 	static String weekDay[] = {"lunes", "martes", "miércoles", "jueves", "viernes"};
+ 	static String weekDay[] = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
 
 
  	//funcion que convierte una fila en una hora
