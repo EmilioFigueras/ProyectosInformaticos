@@ -59,7 +59,7 @@ public class GruposCompatibles{
 
 	}
 
-	public boolean sonCompatibles(String[][] horario_previo, String[][] horario_resultado, ArrayList<? extends Grupo> grupos){
+	public boolean sonCompatibles(String[][] horario_previo, String[][] horario_resultado, ArrayList<? extends Grupo> grupos, ArrayList<Asignatura> todas_asig){
 		
 		gru = 237;
 		gru2 = 237;
@@ -74,21 +74,21 @@ public class GruposCompatibles{
 		 					if(horario_resultado[k][dia] != null){ //Si hay una asignatura en esta posicion
 		 						String[] coincidente = horario_resultado[k][dia].split(" "); //coincidente[0] = nombre y coincidente[1] = grupo
 		 						encontrado = false;
-		 						for(int q=0; q<seleccion.size() && encontrado==false; q++){ //Bucle para encontrar la asignaura que nos choca
-		 							if((seleccion.get(q).get_nombre()).compareTo(coincidente[0]) == 0){
+		 						for(int q=0; q<todas_asig.size() && encontrado==false; q++){ //Bucle para encontrar la asignatura que nos choca
+		 							if((todas_asig.get(q).get_nombre()).compareTo(coincidente[0]) == 0){
 		 								encontrado=true;
 		 								asig=q; //Posicion en el ArrayList seleccion de la asignatura que nos choca
 		 							}
 		 						}//fin for q
-
+		 						//System.out.println("asig = "+asig);
 		 						if(grupos.get(0) instanceof Teoria){
-		 							buscarGrupo(seleccion.get(asig).get_teoria(), grupos, coincidente, k, horario_previo, j);
+		 							buscarGrupo(todas_asig.get(asig).get_teoria(), grupos, coincidente, k, horario_previo, j);
 		 						}
 		 						else if(grupos.get(0) instanceof Practica){
-		 							buscarGrupo(seleccion.get(asig).get_practica(), grupos, coincidente, k, horario_previo, j);
+		 							buscarGrupo(todas_asig.get(asig).get_practica(), grupos, coincidente, k, horario_previo, j);
 		 						}
 		 						else if(grupos.get(0) instanceof Seminario){
-		 							buscarGrupo(seleccion.get(asig).get_seminario(), grupos, coincidente, k, horario_previo, j);
+		 							buscarGrupo(todas_asig.get(asig).get_seminario(), grupos, coincidente, k, horario_previo, j);
 		 						}
 															
 		 					}//fin if horario_resultado != null

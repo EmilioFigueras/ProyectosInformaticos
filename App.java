@@ -67,21 +67,80 @@
  		}
  	}
 
- 	public static void main(String[] args){
- 		//Simulacion de datos de la base de datos
-
- 		
- 		int dia; //Dia del 0 al 4 en el que tiene lugar la clase indicada
+ 	/*Devuelve true si es factible y la asignatura se puede insertar, o false si no lo es y la asignatura se ha eliminado*/
+ 	/*Parametros:
+ 		seleccion = ArrayList con las asignaturas a comprobar la factibilidad
+ 		todas_asig = ArrayList con todas las asignaturas con las que la asignatura que se esta analizando podría chocar
+ 		horario_previo = horario previo
+ 		horario_resultado = horario final
+ 		i = nos indica la asignatura que se analizara del Array seleccion
+ 		tipo = nos indica si se ha llamado a esta funcion para insertar una asignatura (tipo==1) o solo para comprobar la factibilidad (tipo!=1)
+ 	*/
+ 	public static boolean factibilidad(ArrayList<Asignatura> seleccion, ArrayList<Asignatura> todas_asig, String[][] horario_previo, String[][] horario_resultado, int i, int tipo){
  		int asig; //Posocion en el arraylist "seleccion" de la asignatura coincidente.
  		int gru_t; //Posocion en el arraylist "seleccion" del grupo de teoria de la asignatura coincidente.
  		int gru_p; //Posocion en el arraylist "seleccion" del grupo de practicas de la asignatura coincidente.
  		int gru_s; //Posocion en el arraylist "seleccion" del grupo de seminario de la asignatura coincidente.
- 		boolean ocupado; //Indica si el hueco ya esta ocupado en el horario final
- 		boolean encontrado; //Indica si se ha encontrado una Asignatura que se esta buscando
+ 		int gru2_t; //Posicion en el arraylist "seleccion" del grupo de teoria de la asignatura que se esta analiznado y coincide con otra.
+ 		int gru2_p; //Posicion en el arraylist "seleccion" del grupo de practica de la asignatura que se esta analiznado y coincide con otra.
+ 		int gru2_s; //Posicion en el arraylist "seleccion" del grupo de seminario de la asignatura que se esta analiznado y coincide con otra.
  		boolean entra_t, entra_s, entra_p; //Comprueba que de una asignatura hay sitio para, al menos, un grupo de teoria,seminario (si lo tuviese) y practica.
- 		int gr_coin; //Indica el numero de grupos de una asginatura coincidente con otra.
+ 		
 
+ 		//Pasamos el resultado obtenido hasta ahora a la matriz previa que sera la que vamos a ir modificando
+ 		//Las funciones para copiar matriz copian la posicion de memoria, por lo que hay que copiarla con bucle :=(
+ 		for(int j=0; j<24; j++)
+ 			for(int q=0; q<5; q++)
+ 				horario_previo[j][q]=horario_resultado[j][q];
+ 			
+ 		gruposCompatibles = new GruposCompatibles(seleccion,seleccion.get(i));
+ 		entra_t = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_teoria(), todas_asig);
+ 		gru_t = gruposCompatibles.getGru();
+ 		gru2_t = gruposCompatibles.getGru2();
+ 		entra_p = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_practica(), todas_asig);
+ 		gru_p = gruposCompatibles.getGru();
+ 		gru2_p = gruposCompatibles.getGru2();
+ 		entra_s = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_seminario(), todas_asig);
+ 		gru_s = gruposCompatibles.getGru();
+ 		gru2_s = gruposCompatibles.getGru2();
+ 		asig = gruposCompatibles.getAsig();
+
+ 		if(entra_t && entra_s && entra_p){ //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
+ 			if(tipo!=1)
+ 				return true;
+ 			for(int j=0; j<24; j++)
+ 				for(int k=0; k<5; k++)
+ 					if(horario_previo[j][k]!=null)
+ 						horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
+ 			if(asig!=-1){ //Si ha habido alguna asignatura que chocase
+ 				if(gru_t!=237) //Si ha chocado algun grupo de teoria
+	 				seleccion.get(asig).get_teoria().remove(gru_t);
+	 			if(gru2_t!=237) //Si sobra un grupo de teoria de esta asignatura
+	 				seleccion.get(i).get_teoria().remove(gru2_t);
+	 			if(gru_p!=237) //Si ha chocado algun grupo de practicas
+					seleccion.get(asig).get_practica().remove(gru_p);
+	 			if(gru2_p!=237) //Si sobra un grupo de teoria de esta asignatura
+	 				seleccion.get(i).get_practica().remove(gru2_p);
+	 			if(gru_s!=237) //Si ha chocado algun grupo de seminario
+	 				seleccion.get(asig).get_seminario().remove(gru_s);
+	 			if(gru2_s!=237) //Si sobra un grupo de teoria de esta asignatura
+					seleccion.get(i).get_seminario().remove(gru2_s);
+	 		}//fin if asig!=-1
+	 		return true;
+	 	/*CREO QUE ESTE COMENTARIO SE PEUDE ELIMINAR
+	 	//Esto lo hacemos para que la sobreescritura en caso de que haya mas de un grupo de la asignatura "i" (la que se analiza)
+	 	//tenga sentido. Es decir, la variable gr_coin y su uso tenga utilidad.
+	 	/*CREO QUE HASTA AQUI SE PUEDE ELIMINAR... MMMM...*/
+ 		}else{ //fin if
+ 			//System.out.println("La asignatura "+seleccion.get(i).get_nombre()+" no es compatible con el resto.");
+ 			seleccion.remove(i); //Si no añadimos la asignatura, la borramos de la seleccion y no hace falta incrementar para pasar a la siguiente
+ 			return false;
+ 		}
+ 	}
+
+ 	public static void main(String[] args){
  		//OBTENEMOS ASIGNATURAS DE UNA BASE DE DATOS SIMULADA
+ 		ArrayList<Asignatura> asig_disponibles = new ArrayList<Asignatura>(simulatedDB.getDB());
  		ArrayList<Asignatura> todas_asig = new ArrayList<Asignatura>(simulatedDB.getDB());
 
 
@@ -89,85 +148,53 @@
  		String horario_resultado[][] = new String[24][5]; //Horario final
  		String horario_previo[][] = new String[24][5]; //Horario previo al final
 
- 		//Matriz de posibles incorporaciones
+ 		//Matrices para la actualizacion en directo de asignaturas disponibles
+ 		String horario_resultado_live[][] = new String[24][5];
+ 		String horario_previo_live[][] = new String[24][5];
+
  		
- 		ArrayList<Asignatura> seleccion = new ArrayList<Asignatura>();
+ 		ArrayList<Asignatura> seleccion = new ArrayList<Asignatura>(); //ArrayList de asignaturas insertadas
+ 		int insertar = 0; //Asignatura del ArrayList seleccion que se va a insertar
 
  		//Mostrar asignaturas
  		//Vamos mostrando las asignaturas y el usuario va eligiendo en orden de preferencia
  		int opc;
+ 		int i=0;
  		do{
  			System.out.println();
  			System.out.println("Asignaturas disponibles: ");
- 			for(int i=0; i<todas_asig.size(); i++){
- 				System.out.println((i+1)+".- "+todas_asig.get(i).get_nombre());
+ 			for(i=0; i<asig_disponibles.size(); i++){
+ 				System.out.println((i+1)+".- "+asig_disponibles.get(i).get_nombre());
  			}
  			System.out.println("0.-Hecho.");
  			System.out.println("Seleccione la asignatura que mas le interese o pulse 0 para finalizar:");
  			opc = sc.nextInt();
- 			if(opc<=todas_asig.size() && opc>0){
- 				seleccion.add(todas_asig.get(opc-1));
- 				todas_asig.remove(opc-1);
+ 			if(opc<=asig_disponibles.size() && opc>0){
+ 				seleccion.add(asig_disponibles.get(opc-1));
+ 				factibilidad(seleccion, seleccion, horario_previo, horario_resultado, insertar, 1);
+ 				insertar++;
+ 				asig_disponibles.remove(opc-1);
+ 				i=0;
+ 				while(i<asig_disponibles.size()){
+ 					//Pasamos el horario tal como lo dejamos, en cada iteraccion se modificara el horario_resultado_live, por lo que
+ 					//tendremos que volverlo a poner como estaba
+ 					for(int j=0; j<24; j++)
+ 						for(int q=0; q<5; q++)
+ 							horario_resultado_live[j][q] = horario_resultado[j][q];
+ 					
+ 					//Llamamos a la funcion de factibilidad 					
+ 					if(factibilidad(asig_disponibles, todas_asig, horario_previo_live, horario_resultado_live, i, 2))
+ 						i++; //Si añadimos la asginaturas, incrementamos i para que pase a la siguiente
+ 					//Si no la añadimos, se eliminara la asignatura y no hará falta incrementar i para pasar a la siguiente
+
+ 				}
+
  			}else if(opc>0){
  				System.out.println("Eleccion erronea");
  			}
 
  		}while(opc!=0);
 
-
- 		//Ya tenemos todas las asignaturas que el usuario ha seleccionado en el ArrayList seleccion
- 		//Recorremos todas las asignaturas
- 		int i=0;
- 		//for(int i=0; i<seleccion.size(); i++){ //Bucle para recorrer la asignaturas seleccionadas
- 		while(i<seleccion.size()){ //Bucle para recorrer la asignaturas seleccionadas
-
- 			//Pasamos el resultado obtenido hasta ahora a la matriz previa que sera la que vamos a ir modificando
- 			//Las funciones para copiar matriz copian la posicion de memoria, por lo que hay que copiarla con bucle :=(
- 			for(int j=0; j<24; j++)
- 				for(int q=0; q<5; q++)
- 					horario_previo[j][q]=horario_resultado[j][q];
- 			
- 			gruposCompatibles = new GruposCompatibles(seleccion,seleccion.get(i));
- 			entra_t = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_teoria());
- 			gru_t = gruposCompatibles.getGru();
- 			int gru2_t = gruposCompatibles.getGru2();
- 			entra_p = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_practica());
- 			gru_p = gruposCompatibles.getGru();
- 			int gru2_p = gruposCompatibles.getGru2();
- 			entra_s = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_seminario());
- 			gru_s = gruposCompatibles.getGru();
- 			int gru2_s = gruposCompatibles.getGru2();
- 			asig = gruposCompatibles.getAsig();
-
- 			if(entra_t && entra_s && entra_p){ //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
- 				for(int j=0; j<24; j++)
- 					for(int k=0; k<5; k++)
- 						if(horario_previo[j][k]!=null)
- 							horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
- 				if(asig!=-1){ //Si ha habido alguna asignatura que chocase
-	 				if(gru_t!=237) //Si ha chocado algun grupo de teoria
-	 					seleccion.get(asig).get_teoria().remove(gru_t);
-	 				if(gru2_t!=237) //Si sobra un grupo de teoria de esta asignatura
-	 					seleccion.get(i).get_teoria().remove(gru2_t);
-	 				if(gru_p!=237) //Si ha chocado algun grupo de practicas
-	 					seleccion.get(asig).get_practica().remove(gru_p);
-	 				if(gru2_p!=237) //Si sobra un grupo de teoria de esta asignatura
-	 					seleccion.get(i).get_practica().remove(gru2_p);
-	 				if(gru_s!=237) //Si ha chocado algun grupo de seminario
-	 					seleccion.get(asig).get_seminario().remove(gru_s);
-	 				if(gru2_s!=237) //Si sobra un grupo de teoria de esta asignatura
-	 					seleccion.get(i).get_seminario().remove(gru2_s);
-	 			}//fin if asig!=-1
-	 		//Esto lo hacemos para que la sobreescritura en caso de que haya mas de un grupo de la asignatura "i" (la que se analiza)
-	 		//tenga sentido. Es decir, la variable gr_coin y su uso tenga utilidad.
-
-	 		i++; //Si añadimos la asginaturas, incrementamos i para que pase a la siguiente
- 			}else{ //fin if
- 				System.out.println("La asignatura "+seleccion.get(i).get_nombre()+" no es compatible con el resto.");
- 				seleccion.remove(i); //Si no añadimos la asignatura, la borramos de la seleccion y no hace falta incrementar para pasar a la siguiente
- 			}
-	 		
- 		}//fin for i
 
  		System.out.println("Este es el horario provisional: ");
  		//Muestra de resultados provisionales
@@ -190,4 +217,4 @@
 
  	}//fin main
  	 	
-}
+} 
