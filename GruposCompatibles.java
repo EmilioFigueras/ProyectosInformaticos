@@ -4,7 +4,7 @@ public class GruposCompatibles{
 
 	private ArrayList<Asignatura> seleccion;
 	private Asignatura asignatura;
-	private int asig, gru, gru2, dia;
+	private int asig, dia;
 	private boolean encontrado,compatible, ocupado;
 
 	public GruposCompatibles(ArrayList<Asignatura> seleccion, Asignatura asignatura){
@@ -13,14 +13,10 @@ public class GruposCompatibles{
 		asig = -1;
 		compatible = true;
 		ocupado = false;
-		//gru = 237;
 	}
 
 	public int getAsig(){return asig;}
 
-	public int getGru(){return gru;}
-
-	public int getGru2(){return gru2;}
 
 	public static double fila_a_hora(int n){
  		//n+8.5-n*0.5
@@ -30,29 +26,61 @@ public class GruposCompatibles{
  		return (int)(2*(hora-8.5));
  	}
 
+ 	/*public static void mostrar_horario(String[][] horario_resultado){
+ 		//Muestra de resultados
+ 		System.out.println();
+ 		for(int i=0; i<25; i++){
+ 			for(int j=0; j<5; j++){
+ 				System.out.print(horario_resultado[i][j]+"  ");
+ 			}
+ 			System.out.println();
+ 		}
+ 	}*/
+
 	private void buscarGrupo(ArrayList<? extends Grupo> gruposConCoincidencia, ArrayList<? extends Grupo> grupos, String[] coincidente, int k, String[][] horario_previo, int j)
 	{
 		//gr_coin = seleccion.get(asig).grupos_teoria(); //Numeros de grupos de la asignatura que nos choca
 
 		//Ahora buscamos el grupo concreto que coincide
-		if(gruposConCoincidencia.size()>1 || grupos.size()>1){ //Si tiene mas de un grupo
-			for(int q=0; q<gruposConCoincidencia.size(); q++){
-				//Entreamos en asignaturas seleccionadas->Asignatura coincidente->ArrayList de Teoria->Y recorremos sus nombres
-				if((gruposConCoincidencia.get(q).get_nombre()).compareTo(coincidente[1]) == 0){
-					gru = q;
-				}
-			}//fin for q
-			if(gruposConCoincidencia.size()>1) //Si el grupo que esta ya puesto tiene otra opcion, lo sobreescribimos
-				horario_previo[k][dia] = asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
-			else{ //Si no tiene otra opcion, volvemos a poner gru como que no concuerda
-				gru = 237;
-				gru2 = j; //Indicamos que en gru2 el grupo que sobra de la asignatura que estamos analizando
-			}
+		//System.out.println("Tamaño grupoconcoincidnecia: "+gruposConCoincidencia.size()); //Las que ya estan
+		//System.out.println("Tamaño grupos: "+grupos.size()); //La que quieres meter
+		int futuro = k+1;
+		String asignatura_a_sobreescribir;
+		boolean fin = false;
+		if(grupos.size() < gruposConCoincidencia.size()){
+			asignatura_a_sobreescribir = horario_previo[k][dia];
+			horario_previo[k][dia] = asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
 
-		}else //Si no tiene mas de un grupo, pues entonces la asignatura "i" no entra.
-			if(gruposConCoincidencia.size()==1)
+			//Buscamos si hay restos de grupos ya eliminados
+			if(k==(hora_a_fila(grupos.get(j).get_hora_fin())-1)){
+				while(futuro<25 && !fin){
+					if(horario_previo[futuro][dia] == null)
+						fin = true;
+					else{
+						if(asignatura_a_sobreescribir.compareTo(horario_previo[futuro][dia]) == 0){
+							horario_previo[futuro][dia] = null;
+						}
+					}
+					futuro++;
+				}
+			}
+		}else
+			if(gruposConCoincidencia.size()<=1 && grupos.size()<=1)
 				compatible=false;
 
+
+
+
+
+		/*if(gruposConCoincidencia.size()>1 || grupos.size()>1){ //Si tiene mas de un grupo
+			if(gruposConCoincidencia.size()>1) //Si el grupo que esta ya puesto tiene otra opcion, lo sobreescribimos
+				horario_previo[k][dia] = asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
+			//mostrar_horario(horario_previo);
+
+		}else //Si no tiene mas de un grupo, pues entonces la asignatura "i" no entra.
+			if(gruposConCoincidencia.size()<=1 && grupos.size()<=1)
+				compatible=false;
+		*/
 		ocupado = true;
 		//Ocupado = true porque si puede sobreescribirse la asignatura ya lo habra hecho anteriormente, y si no puede sobreescribirse, 
 		//pues significa que esta asignatura no entra, por lo que no se agregara en la matriz final.
@@ -60,9 +88,7 @@ public class GruposCompatibles{
 	}
 
 	public boolean sonCompatibles(String[][] horario_previo, String[][] horario_resultado, ArrayList<? extends Grupo> grupos, ArrayList<Asignatura> todas_asig){
-		
-		gru = 237;
-		gru2 = 237;
+
 
 		for(int j=0; j<grupos.size(); j++){ //Bucle para recorrer los grupos de teoria dentro de la asignatura seleccionada
 		 				ocupado=false;
@@ -81,13 +107,22 @@ public class GruposCompatibles{
 		 							}
 		 						}//fin for q
 		 						//System.out.println("asig = "+asig);
+		 						//System.out.println("Nombre asignatura moviente: "+todas_asig.get(asig).get_nombre());
+		 						//System.out.println("Nombre asignatura analizandose: "+asignatura.get_nombre());
+
 		 						if(grupos.get(0) instanceof Teoria){
+		 							//System.out.println("Teoria: ");
 		 							buscarGrupo(todas_asig.get(asig).get_teoria(), grupos, coincidente, k, horario_previo, j);
+		 							//System.out.println(compatible);
 		 						}
 		 						else if(grupos.get(0) instanceof Practica){
 		 							buscarGrupo(todas_asig.get(asig).get_practica(), grupos, coincidente, k, horario_previo, j);
+		 							//System.out.println(compatible);
+
 		 						}
 		 						else if(grupos.get(0) instanceof Seminario){
+		 							//System.out.println("Seminario: ");
+		 						if(todas_asig.get(asig).get_seminario().size() !=0)
 		 							buscarGrupo(todas_asig.get(asig).get_seminario(), grupos, coincidente, k, horario_previo, j);
 		 						}
 															

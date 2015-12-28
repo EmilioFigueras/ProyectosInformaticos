@@ -42,6 +42,35 @@ public class Asignatura{
 
 	}
 
+	public Asignatura(Asignatura asig){
+		nombre_ = asig.get_nombre();
+		datos_ = asig.get_datos();
+		tipo_ = asig.get_tipo();
+		coment_ = asig.get_comentario();
+		teoria_ = new ArrayList<Teoria>();
+		for(int i=0; i<asig.get_teoria().size(); i++)
+			teoria_.add(asig.get_teoria().get(i));
+		practica_ = new ArrayList<Practica>();
+		for(int i=0; i<asig.get_practica().size(); i++)
+			practica_.add(asig.get_practica().get(i));
+		seminario_ = new ArrayList<Seminario>();
+		for(int i=0; i<asig.get_seminario().size(); i++)
+			seminario_.add(asig.get_seminario().get(i));
+
+	}
+
+	/*public void clear(ArrayList<Teoria> teoria, ArrayList<Practica> practica, ArrayList<Seminario> seminario){
+		teoria_ = new ArrayList<Teoria>();
+		for(int i=0; i<teoria.size(); i++)
+			teoria_.add(teoria.get(i));
+		practica_ = new ArrayList<Practica>();
+		for(int i=0; i<practica.size(); i++)
+			practica_.add(practica.get(i));
+		seminario_ = new ArrayList<Seminario>();
+		for(int i=0; i<seminario.size(); i++)
+			seminario_.add(seminario.get(i));
+	}*/
+
 	//Devuelve el nombre de la asignatura
 	public String get_nombre(){return nombre_;}
 

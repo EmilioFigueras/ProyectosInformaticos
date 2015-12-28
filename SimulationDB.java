@@ -2,7 +2,7 @@ import java.util.*;
 
 public class SimulationDB{
 
-	public ArrayList<Asignatura> todas_asig;
+	private ArrayList<Asignatura> todas_asig;
 
 	public SimulationDB(){
 		todas_asig = new ArrayList<Asignatura>();
