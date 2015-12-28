@@ -64,9 +64,13 @@ public class GruposCompatibles{
 
 	}
 
+	/*
+	grupos = asignatura que intentamos colocar
+	todas_asig = asignaturas ya colocaddas
+	*/
 	public boolean sonCompatibles(String[][] horario_previo, String[][] horario_resultado, ArrayList<? extends Grupo> grupos, ArrayList<Asignatura> todas_asig){
 
-
+		int tipoSub = 0; //1 = teoria, 2 = practica, 3 = seminario
 		for(int j=0; j<grupos.size(); j++){ //Bucle para recorrer los grupos de teoria dentro de la asignatura seleccionada
 		 				ocupado=false;
 		 				//Recorremos el horario de este grupo
@@ -84,17 +88,40 @@ public class GruposCompatibles{
 		 							}
 		 						}//fin for q
 
-		 						if(grupos.get(0) instanceof Teoria){
-		 							buscarGrupo(todas_asig.get(asig).get_teoria(), grupos, coincidente, k, horario_previo, j);
+		 						tipoSub=0;
+		 						encontrado=false;
+
+		 						//Ahora buscamos el subgrupo al que pertenece la asignatura que nos choca
+		 						for(int q=0; q<todas_asig.get(asig).get_teoria().size() && encontrado==false; q++){
+		 							if((todas_asig.get(asig).get_teoria().get(q).get_nombre()).compareTo(coincidente[1]) ==0){
+		 								encontrado=true;
+		 								tipoSub=1;
+		 							}
 		 						}
-		 						else if(grupos.get(0) instanceof Practica){
+		 						for(int q=0; q<todas_asig.get(asig).get_practica().size() && encontrado==false; q++){
+		 							if((todas_asig.get(asig).get_practica().get(q).get_nombre()).compareTo(coincidente[1]) ==0){
+		 								encontrado=true;
+		 								tipoSub=2;
+		 							}
+		 						}
+		 						for(int q=0; q<todas_asig.get(asig).get_seminario().size() && encontrado==false; q++){
+		 							if((todas_asig.get(asig).get_seminario().get(q).get_nombre()).compareTo(coincidente[1]) ==0){
+		 								encontrado=true;
+		 								tipoSub=3;
+		 							}
+		 						}
+
+
+		 						if(tipoSub==1)
+		 							buscarGrupo(todas_asig.get(asig).get_teoria(), grupos, coincidente, k, horario_previo, j);
+
+		 						if(tipoSub==2)
 		 							buscarGrupo(todas_asig.get(asig).get_practica(), grupos, coincidente, k, horario_previo, j);
 
-		 						}
-		 						else if(grupos.get(0) instanceof Seminario){
+
+		 						if(tipoSub==3)
 		 							if(todas_asig.get(asig).get_seminario().size() !=0)
 		 								buscarGrupo(todas_asig.get(asig).get_seminario(), grupos, coincidente, k, horario_previo, j);
-		 						}
 															
 		 					}//fin if horario_resultado != null
 		 				}//fin for k

@@ -2,6 +2,7 @@
 
 
 public class Asignatura{
+	private int id_;
 	private String nombre_;
 	private String datos_;
 	private String tipo_; //Obligatoria, Optativa, Básica
@@ -10,7 +11,8 @@ public class Asignatura{
 	private ArrayList<Seminario> seminario_;
 	private String coment_;
 
-	public Asignatura(String nombre, String datos, String tipo, ArrayList<Teoria> teoria, ArrayList<Practica> practica, ArrayList<Seminario> seminario, String coment){
+	public Asignatura(int id, String nombre, String datos, String tipo, ArrayList<Teoria> teoria, ArrayList<Practica> practica, ArrayList<Seminario> seminario, String coment){
+		id_ = id;
 		nombre_ = nombre;
 		datos_ = datos;
 		tipo_ = tipo;
@@ -27,7 +29,8 @@ public class Asignatura{
 
 	}
 
-	public Asignatura(String nombre, String datos, String tipo, ArrayList<Teoria> teoria, ArrayList<Practica> practica, String coment){
+	public Asignatura(int id, String nombre, String datos, String tipo, ArrayList<Teoria> teoria, ArrayList<Practica> practica, String coment){
+		id_ = id;
 		nombre_ = nombre;
 		datos_ = datos;
 		tipo_ = tipo;
@@ -43,6 +46,7 @@ public class Asignatura{
 	}
 
 	public Asignatura(Asignatura asig){
+		id_ = asig.getId();
 		nombre_ = asig.get_nombre();
 		datos_ = asig.get_datos();
 		tipo_ = asig.get_tipo();
@@ -70,6 +74,8 @@ public class Asignatura{
 		for(int i=0; i<seminario.size(); i++)
 			seminario_.add(seminario.get(i));
 	}*/
+
+	public int getId(){return id_;}
 
 	//Devuelve el nombre de la asignatura
 	public String get_nombre(){return nombre_;}

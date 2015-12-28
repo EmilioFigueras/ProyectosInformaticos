@@ -6,6 +6,7 @@ public abstract class Grupo{
  	protected double hora_inicio_;
  	protected double hora_fin_;
  	protected int dia_; //0 = Lunes, 1 = Martes, 2 = Mier, 3 = Jueves, 4 = Viernes
+ 	protected String tipoSub_;
 
  	//Observadores
  	public double get_hora_inicio(){
@@ -14,6 +15,10 @@ public abstract class Grupo{
 
  	public double get_hora_fin(){
  		return hora_fin_;
+ 	}
+
+ 	public String get_tipoSub(){
+ 		return tipoSub_;
  	}
 
  	/*public String codigoAsig(){

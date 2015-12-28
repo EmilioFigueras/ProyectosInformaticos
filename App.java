@@ -213,13 +213,23 @@
  		}
  	}*/
 
+ 	public static int posicion_id(int id, ArrayList<Asignatura> buscar){
+ 		for(int i=0; i<buscar.size(); i++)
+ 			if(buscar.get(i).getId() == id)
+ 				return i;
+ 		return -1;
+ 	}
+
  	public static void main(String[] args){
  		//OBTENEMOS ASIGNATURAS DE UNA BASE DE DATOS SIMULADA
  		SimulationDB simulacion1 = new SimulationDB();
  		SimulationDB simulacion2 = new SimulationDB();
  		ArrayList<Asignatura> asig_disponibles = new ArrayList<Asignatura>(simulacion1.getDB());
  		ArrayList<Asignatura> todas_asig = new ArrayList<Asignatura>(simulacion2.getDB());
- 		ArrayList<Asignatura> seleccion_post = new ArrayList<Asignatura>();
+ 		ArrayList<Asignatura> seleccion_post = new ArrayList<Asignatura>(); //Estado anterior de la seleccion antes de agregar una nueva
+ 		int num_total_asig = asig_disponibles.size();
+
+ 		ArrayList<Integer> accion_usuario = new ArrayList<Integer>();
 
  		//Hay 25 franjas horarios. Creamos matriz que filas = franjas horaris y columnas = dias
  		String horario_resultado[][] = new String[25][5]; //Horario final
@@ -231,28 +241,41 @@
 
  		
  		ArrayList<Asignatura> seleccion = new ArrayList<Asignatura>(); //ArrayList de asignaturas insertadas
+ 		ArrayList<Asignatura> incompatibles = new ArrayList<Asignatura>(); //Asignaturas que se van eliminando
  		int insertar = 0; //Asignatura del ArrayList seleccion que se va a insertar
 
  		//Mostrar asignaturas
  		//Vamos mostrando las asignaturas y el usuario va eligiendo en orden de preferencia
  		int opc;
  		int i=0;
+ 		int opc_real; //ID del elemento que el usuario quiere eliminar
  		do{
  			System.out.println();
+ 			System.out.println("Asignaturas seleccionadas: ");
+ 			System.out.println("Seleccione una para eliminarla: ");
+ 			for(i=0; i<seleccion.size(); i++){
+ 				System.out.println((num_total_asig+seleccion.get(i).getId())+".- "+seleccion.get(i).get_nombre());
+ 			}
+ 			System.out.println("Asignaturas incompatibles: ");
+ 			for(i=0; i<incompatibles.size(); i++){
+ 				System.out.println((i+1)+".- "+incompatibles.get(i).get_nombre());
+ 			}
  			System.out.println("Asignaturas disponibles: ");
  			for(i=0; i<asig_disponibles.size(); i++){
- 				System.out.println((i+1)+".- "+asig_disponibles.get(i).get_nombre());
+ 				System.out.println((asig_disponibles.get(i).getId())+".- "+asig_disponibles.get(i).get_nombre());
  			}
  			System.out.println("0.-Hecho.");
- 			System.out.println("Seleccione la asignatura que mas le interese o pulse 0 para finalizar:");
+ 			System.out.println("Seleccione la asignatura disponible que mas le interese o pulse 0 para finalizar:");
  			opc = sc.nextInt();
- 			if(opc<=asig_disponibles.size() && opc>0){
+ 			if(opc<=num_total_asig && opc>0){
+ 				accion_usuario.add(0, opc); //Insertamos siempre en la primera posicion
+
  				seleccion_post = seleccion;
- 				seleccion.add(new Asignatura(asig_disponibles.get(opc-1)));
+ 				seleccion.add(new Asignatura(asig_disponibles.get(posicion_id(opc, asig_disponibles))));
  				//Insertamos y comparamos a lo que habia antes de agregar la nueva asignatura
  				factibilidad(seleccion, seleccion_post, horario_previo, horario_resultado, insertar, 1);
  				insertar++;
- 				asig_disponibles.remove(opc-1);
+ 				asig_disponibles.remove(posicion_id(opc, asig_disponibles));
  				i=0;
  				//actualizar_asig_disponibles(seleccion, asig_disponibles);
 
@@ -266,14 +289,60 @@
  					//Llamamos a la funcion de factibilidad
  					if(factibilidad(asig_disponibles, seleccion, horario_previo_live, horario_resultado_live, i, 2))
  						i++; //Si añadimos la asginaturas, incrementamos i para que pase a la siguiente
- 					else
+ 					else{
+ 						incompatibles.add(new Asignatura(asig_disponibles.get(i)));
  						asig_disponibles.remove(i);
+ 					}
+ 						
  					//Si no la añadimos, se eliminara la asignatura y no hará falta incrementar i para pasar a la siguiente
 
  				}
 
- 			}else if(opc>0){
- 				System.out.println("Eleccion erronea");
+ 			}else if(opc<=(num_total_asig*2) && opc>0){
+ 				opc_real = opc-num_total_asig;
+ 				accion_usuario.remove(accion_usuario.indexOf(opc_real));
+ 				//Limpiamos todas las variables
+ 				insertar=0;
+ 				seleccion.clear();
+ 				seleccion_post.clear();
+ 				asig_disponibles.clear();
+ 				asig_disponibles = new ArrayList<Asignatura>(simulacion1.getDB());
+ 				incompatibles.clear();
+ 				for(int j=0; j<25; j++)
+ 					for(int q=0; q<5; q++)
+ 						horario_resultado[j][q]=null;
+
+ 				System.out.println(accion_usuario.size());
+ 				for(int asig_auto=0; asig_auto<accion_usuario.size(); asig_auto++){
+ 					seleccion_post = seleccion;
+ 					seleccion.add(new Asignatura(asig_disponibles.get(posicion_id(accion_usuario.get(asig_auto), asig_disponibles))));
+ 					//Insertamos y comparamos a lo que habia antes de agregar la nueva asignatura
+ 					factibilidad(seleccion, seleccion_post, horario_previo, horario_resultado, insertar, 1);
+ 					insertar++;
+ 					asig_disponibles.remove(posicion_id(accion_usuario.get(asig_auto), asig_disponibles));
+ 					i=0;
+ 					//actualizar_asig_disponibles(seleccion, asig_disponibles);
+
+ 					while(i<asig_disponibles.size()){
+ 						//Pasamos el horario tal como lo dejamos, en cada iteraccion se modificara el horario_resultado_live, por lo que
+ 						//tendremos que volverlo a poner como estaba
+ 						for(int j=0; j<25; j++)
+ 							for(int q=0; q<5; q++)
+ 								horario_resultado_live[j][q] = horario_resultado[j][q];
+ 					
+ 						//Llamamos a la funcion de factibilidad
+ 						if(factibilidad(asig_disponibles, seleccion, horario_previo_live, horario_resultado_live, i, 2))
+ 							i++; //Si añadimos la asginaturas, incrementamos i para que pase a la siguiente
+ 						else{
+ 							incompatibles.add(new Asignatura(asig_disponibles.get(i)));
+ 							asig_disponibles.remove(i);
+ 						}
+ 						
+ 						//Si no la añadimos, se eliminara la asignatura y no hará falta incrementar i para pasar a la siguiente
+
+ 					}
+ 				}
+
  			}
 
  		}while(opc!=0);
