@@ -96,19 +96,13 @@
  		else
  			entra_s = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_seminario(), todas_asig);
 
-
- 		/*System.out.println(entra_t);
- 		System.out.println(entra_p);
- 		System.out.println(entra_s);*/
  		if(entra_t && entra_s && entra_p){ //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
  			
  			if(tipo!=1)
  				return true;
  			for(int j=0; j<25; j++)
  				for(int k=0; k<5; k++)
- 					//if(horario_previo[j][k]!=null)
- 						horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
- 			//mostrar_horario(horario_resultado);
+ 					horario_resultado[j][k]=horario_previo[j][k]; //Lo copiamos
  			seleccion.clear();
  			asig_finales(horario_resultado, seleccion);
 	 		return true;
@@ -120,7 +114,6 @@
 
  	/*Devuelve un ArrayList con las asignaturas y subgrupos que estan en el horario final*/
  	public static void asig_finales(String[][] horario_resultado, ArrayList<Asignatura> sel_final){
- 		//ArrayList<Asignatura> sel_final = new ArrayList<Asignatura>(); //Arraylist con los grupos que se meten finalmente
  		boolean seguir_buscando;
  		boolean primera_vez;
  		String ultimo_analizado = " ";
@@ -190,10 +183,6 @@
 
  				}//fin if horario_resultado
  			}//fin for j
-
- 			//return sel_final;
-
-
  	}
 
  	/*public static void actualizar_asig_disponibles(ArrayList<Asignatura> seleccion, ArrayList<Asignatura> asig_disponibles){
@@ -260,6 +249,7 @@
  			if(opc<=asig_disponibles.size() && opc>0){
  				seleccion_post = seleccion;
  				seleccion.add(new Asignatura(asig_disponibles.get(opc-1)));
+ 				//Insertamos y comparamos a lo que habia antes de agregar la nueva asignatura
  				factibilidad(seleccion, seleccion_post, horario_previo, horario_resultado, insertar, 1);
  				insertar++;
  				asig_disponibles.remove(opc-1);
@@ -274,8 +264,6 @@
  							horario_resultado_live[j][q] = horario_resultado[j][q];
  					
  					//Llamamos a la funcion de factibilidad
- 					/*System.out.println(asig_disponibles.get(i).get_nombre());
- 					System.out.println("Tamaño practica: "+asig_disponibles.get(i).get_practica().size());*/
  					if(factibilidad(asig_disponibles, seleccion, horario_previo_live, horario_resultado_live, i, 2))
  						i++; //Si añadimos la asginaturas, incrementamos i para que pase a la siguiente
  					else

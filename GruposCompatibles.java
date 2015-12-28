@@ -26,17 +26,6 @@ public class GruposCompatibles{
  		return (int)(2*(hora-8.5));
  	}
 
- 	/*public static void mostrar_horario(String[][] horario_resultado){
- 		//Muestra de resultados
- 		System.out.println();
- 		for(int i=0; i<25; i++){
- 			for(int j=0; j<5; j++){
- 				System.out.print(horario_resultado[i][j]+"  ");
- 			}
- 			System.out.println();
- 		}
- 	}*/
-
 	private void buscarGrupo(ArrayList<? extends Grupo> gruposConCoincidencia, ArrayList<? extends Grupo> grupos, String[] coincidente, int k, String[][] horario_previo, int j)
 	{
 		//gr_coin = seleccion.get(asig).grupos_teoria(); //Numeros de grupos de la asignatura que nos choca
@@ -69,18 +58,6 @@ public class GruposCompatibles{
 				compatible=false;
 
 
-
-
-
-		/*if(gruposConCoincidencia.size()>1 || grupos.size()>1){ //Si tiene mas de un grupo
-			if(gruposConCoincidencia.size()>1) //Si el grupo que esta ya puesto tiene otra opcion, lo sobreescribimos
-				horario_previo[k][dia] = asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
-			//mostrar_horario(horario_previo);
-
-		}else //Si no tiene mas de un grupo, pues entonces la asignatura "i" no entra.
-			if(gruposConCoincidencia.size()<=1 && grupos.size()<=1)
-				compatible=false;
-		*/
 		ocupado = true;
 		//Ocupado = true porque si puede sobreescribirse la asignatura ya lo habra hecho anteriormente, y si no puede sobreescribirse, 
 		//pues significa que esta asignatura no entra, por lo que no se agregara en la matriz final.
@@ -106,24 +83,17 @@ public class GruposCompatibles{
 		 								asig=q; //Posicion en el ArrayList seleccion de la asignatura que nos choca
 		 							}
 		 						}//fin for q
-		 						//System.out.println("asig = "+asig);
-		 						//System.out.println("Nombre asignatura moviente: "+todas_asig.get(asig).get_nombre());
-		 						//System.out.println("Nombre asignatura analizandose: "+asignatura.get_nombre());
 
 		 						if(grupos.get(0) instanceof Teoria){
-		 							//System.out.println("Teoria: ");
 		 							buscarGrupo(todas_asig.get(asig).get_teoria(), grupos, coincidente, k, horario_previo, j);
-		 							//System.out.println(compatible);
 		 						}
 		 						else if(grupos.get(0) instanceof Practica){
 		 							buscarGrupo(todas_asig.get(asig).get_practica(), grupos, coincidente, k, horario_previo, j);
-		 							//System.out.println(compatible);
 
 		 						}
 		 						else if(grupos.get(0) instanceof Seminario){
-		 							//System.out.println("Seminario: ");
-		 						if(todas_asig.get(asig).get_seminario().size() !=0)
-		 							buscarGrupo(todas_asig.get(asig).get_seminario(), grupos, coincidente, k, horario_previo, j);
+		 							if(todas_asig.get(asig).get_seminario().size() !=0)
+		 								buscarGrupo(todas_asig.get(asig).get_seminario(), grupos, coincidente, k, horario_previo, j);
 		 						}
 															
 		 					}//fin if horario_resultado != null
