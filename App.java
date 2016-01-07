@@ -43,14 +43,14 @@
  			if(num_grupos > 1){
  				System.out.println("Seleccione el grupo de "+tipo+" que desee de la asignatura "+nombre);
  				for(int j=0; j<num_grupos; j++){
- 					System.out.println(+(j+1)+".- "+dia_a_string(grupo.get(j).get_dia())+" de "+hora_a_string(grupo.get(j).get_hora_inicio())
- 						+" horas a "+hora_a_string(grupo.get(j).get_hora_fin())+" horas.");
+ 					System.out.println(+(j+1)+".- "+dia_a_string(grupo.get(j).getDia())+" de "+hora_a_string(grupo.get(j).getHora_inicio())
+ 						+" horas a "+hora_a_string(grupo.get(j).getHora_fin())+" horas.");
  				}
  				opc = sc.nextInt();
  				for(int j=0; j<num_grupos; j++)
  					if(j!=(opc-1))
- 						for(int k=hora_a_fila(grupo.get(j).get_hora_inicio()); k<hora_a_fila(grupo.get(j).get_hora_fin()); k++)
- 							horario_resultado[k][grupo.get(j).get_dia()] = null;
+ 						for(int k=hora_a_fila(grupo.get(j).getHora_inicio()); k<hora_a_fila(grupo.get(j).getHora_fin()); k++)
+ 							horario_resultado[k][grupo.get(j).getDia()] = null;
  			 				
  			}//fin if
  	}//fin funcion
@@ -89,12 +89,12 @@
  				horario_previo[j][q]=horario_resultado[j][q];
  			
  		gruposCompatibles = new GruposCompatibles(seleccion,seleccion.get(i));
- 		entra_t = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_teoria(), todas_asig);
- 		entra_p = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_practica(), todas_asig);
- 		if(seleccion.get(i).get_seminario().size() ==0)
+ 		entra_t = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).getTeoria(), todas_asig);
+ 		entra_p = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).getPractica(), todas_asig);
+ 		if(seleccion.get(i).getSeminario().size() ==0)
  			entra_s=true;
  		else
- 			entra_s = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).get_seminario(), todas_asig);
+ 			entra_s = gruposCompatibles.sonCompatibles(horario_previo,horario_resultado,seleccion.get(i).getSeminario(), todas_asig);
 
  		if(entra_t && entra_s && entra_p){ //Si al asignatura tiene espacio libre para la teoria, el seminario y la practica, pues la incorporamos.
  			
@@ -107,7 +107,7 @@
  			asig_finales(horario_resultado, seleccion);
 	 		return true;
  		}else{ //fin if
- 			//System.out.println("La asignatura "+seleccion.get(i).get_nombre()+" no es compatible con el resto.");
+ 			//La asignatura no es compatible
  			return false;
  		}
  	}
@@ -132,7 +132,7 @@
  					seguir_buscando=true;
  					//Buscamos si tenemos la asignatura ya agregada
  					for(int k=0; k<sel_final.size() && seguir_buscando==true; k++){
- 						if((sel_final.get(k).get_nombre()).compareTo(asignatura[0]) == 0){
+ 						if((sel_final.get(k).getNombre()).compareTo(asignatura[0]) == 0){
  							posicion_sel_final=k;
  							seguir_buscando=false;
  							primera_vez=false;
@@ -141,7 +141,7 @@
  					seguir_buscando=true;
  					//Si no tenemos la asignatura ya agregada, pues la agregamos
  					for(int k=0; k<todas_asig.size() && seguir_buscando==true; k++){
- 						if((todas_asig.get(k).get_nombre()).compareTo(asignatura[0]) == 0){
+ 						if((todas_asig.get(k).getNombre()).compareTo(asignatura[0]) == 0){
  							seguir_buscando=false;
  							posicion_todas_asig=k;
  							if(primera_vez==true){
@@ -153,30 +153,30 @@
  					}//fin for k
  					//Si es la primera vez que entra esa asignatura, limpiamos sus grupos
  					if(primera_vez){
- 						sel_final.get(posicion_sel_final).get_teoria().clear();
- 						sel_final.get(posicion_sel_final).get_practica().clear();
- 						sel_final.get(posicion_sel_final).get_seminario().clear();
+ 						sel_final.get(posicion_sel_final).getTeoria().clear();
+ 						sel_final.get(posicion_sel_final).getPractica().clear();
+ 						sel_final.get(posicion_sel_final).getSeminario().clear();
  					}
  					seguir_buscando=true;
  					//Ahora buscamos el subgrupo al que pertenece la asignatura
  					//Buscamos si ese subgrupo es de teoria
- 					for(int k=0; k<todas_asig.get(posicion_todas_asig).get_teoria().size() && seguir_buscando==true; k++){
- 						if((todas_asig.get(posicion_todas_asig).get_teoria().get(k).get_nombre()).compareTo(asignatura[1]) == 0){
- 							sel_final.get(posicion_sel_final).get_teoria().add(todas_asig.get(posicion_todas_asig).get_teoria().get(k));
+ 					for(int k=0; k<todas_asig.get(posicion_todas_asig).getTeoria().size() && seguir_buscando==true; k++){
+ 						if((todas_asig.get(posicion_todas_asig).getTeoria().get(k).getNombre()).compareTo(asignatura[1]) == 0){
+ 							sel_final.get(posicion_sel_final).getTeoria().add(todas_asig.get(posicion_todas_asig).getTeoria().get(k));
  							seguir_buscando=false;
  						}
  					}
  					//Buscamos si ese subgrupo es de practica
- 					for(int k=0; k<todas_asig.get(posicion_todas_asig).get_practica().size() && seguir_buscando==true; k++){
- 						if((todas_asig.get(posicion_todas_asig).get_practica().get(k).get_nombre()).compareTo(asignatura[1]) == 0){
- 							sel_final.get(posicion_sel_final).get_practica().add(todas_asig.get(posicion_todas_asig).get_practica().get(k));
+ 					for(int k=0; k<todas_asig.get(posicion_todas_asig).getPractica().size() && seguir_buscando==true; k++){
+ 						if((todas_asig.get(posicion_todas_asig).getPractica().get(k).getNombre()).compareTo(asignatura[1]) == 0){
+ 							sel_final.get(posicion_sel_final).getPractica().add(todas_asig.get(posicion_todas_asig).getPractica().get(k));
  							seguir_buscando=false;
  						}
  					}
  					//Buscamos si ese subgrupo es de seminario
- 					for(int k=0; k<todas_asig.get(posicion_todas_asig).get_seminario().size() && seguir_buscando==true; k++){
- 						if((todas_asig.get(posicion_todas_asig).get_seminario().get(k).get_nombre()).compareTo(asignatura[1]) == 0){
- 							sel_final.get(posicion_sel_final).get_seminario().add(todas_asig.get(posicion_todas_asig).get_seminario().get(k));
+ 					for(int k=0; k<todas_asig.get(posicion_todas_asig).getSeminario().size() && seguir_buscando==true; k++){
+ 						if((todas_asig.get(posicion_todas_asig).getSeminario().get(k).getNombre()).compareTo(asignatura[1]) == 0){
+ 							sel_final.get(posicion_sel_final).getSeminario().add(todas_asig.get(posicion_todas_asig).getSeminario().get(k));
  							seguir_buscando=false;
  						}
  					}
@@ -189,21 +189,21 @@
  		boolean eliminar;
  		for(int i=0; i<seleccion.size(); i++){
  			for(int j=0; j<asig_disponibles.size(); j++){
- 				if((seleccion.get(i).get_nombre()).compareTo(asig_disponibles.get(j).get_nombre()) == 0){
+ 				if((seleccion.get(i).getNombre()).compareTo(asig_disponibles.get(j).getNombre()) == 0){
  					//Teoria
  					//Si se ha eliminado algun grupo de teoria de las asignaturas seleccionada
- 					if(seleccion.get(i).get_teoria().size() < asig_disponibles.get(j).get_teoria().size()){
+ 					if(seleccion.get(i).getTeoria().size() < asig_disponibles.get(j).getTeoria().size()){
  						//Buscamos cual es el grupo que falta
  						int k=0;
- 						while(k<asig_disponibles.get(j).get_teoria().size()){
+ 						while(k<asig_disponibles.get(j).getTeoria().size()){
  							eliminar=true;
- 							for(int q=0; q<seleccion.get(i).get_teoria().size(); q++){
- 								if((asig_disponibles.get(j).get_teoria().get(k).get_nombre()).compareTo(seleccion.get(i).get_teoria().get(q).get_nombre()) == 0){
+ 							for(int q=0; q<seleccion.get(i).getTeoria().size(); q++){
+ 								if((asig_disponibles.get(j).getTeoria().get(k).getNombre()).compareTo(seleccion.get(i).getTeoria().get(q).getNombre()) == 0){
  									eliminar=false;
  								}
  							}
  							if(eliminar){
- 								asig_disponibles.get(j).get_teoria().remove(k);
+ 								asig_disponibles.get(j).getTeoria().remove(k);
  							}else
  								k++;
  						}
@@ -223,9 +223,7 @@
  	public static void main(String[] args){
  		//OBTENEMOS ASIGNATURAS DE UNA BASE DE DATOS SIMULADA
  		SimulationDB simulacion1 = new SimulationDB();
- 		SimulationDB simulacion2 = new SimulationDB();
  		ArrayList<Asignatura> asig_disponibles = new ArrayList<Asignatura>(simulacion1.getDB());
- 		ArrayList<Asignatura> todas_asig = new ArrayList<Asignatura>(simulacion2.getDB());
  		ArrayList<Asignatura> seleccion_post = new ArrayList<Asignatura>(); //Estado anterior de la seleccion antes de agregar una nueva
  		int num_total_asig = asig_disponibles.size();
 
@@ -248,21 +246,20 @@
  		//Vamos mostrando las asignaturas y el usuario va eligiendo en orden de preferencia
  		int opc;
  		int i=0;
- 		int opc_real; //ID del elemento que el usuario quiere eliminar
  		do{
  			System.out.println();
  			System.out.println("Asignaturas seleccionadas: ");
  			System.out.println("Seleccione una para eliminarla: ");
  			for(i=0; i<seleccion.size(); i++){
- 				System.out.println((num_total_asig+seleccion.get(i).getId())+".- "+seleccion.get(i).get_nombre());
+ 				System.out.println((num_total_asig+seleccion.get(i).getId())+".- "+seleccion.get(i).getNombre());
  			}
  			System.out.println("Asignaturas incompatibles: ");
  			for(i=0; i<incompatibles.size(); i++){
- 				System.out.println((i+1)+".- "+incompatibles.get(i).get_nombre());
+ 				System.out.println((i+1)+".- "+incompatibles.get(i).getNombre());
  			}
  			System.out.println("Asignaturas disponibles: ");
  			for(i=0; i<asig_disponibles.size(); i++){
- 				System.out.println((asig_disponibles.get(i).getId())+".- "+asig_disponibles.get(i).get_nombre());
+ 				System.out.println((asig_disponibles.get(i).getId())+".- "+asig_disponibles.get(i).getNombre());
  			}
  			System.out.println("0.-Hecho.");
  			System.out.println("Seleccione la asignatura disponible que mas le interese o pulse 0 para finalizar:");
@@ -299,8 +296,7 @@
  				}
 
  			}else if(opc<=(num_total_asig*2) && opc>0){
- 				opc_real = opc-num_total_asig;
- 				accion_usuario.remove(accion_usuario.indexOf(opc_real));
+ 				accion_usuario.remove(accion_usuario.indexOf(opc-num_total_asig));
  				//Limpiamos todas las variables
  				insertar=0;
  				seleccion.clear();
@@ -312,7 +308,6 @@
  					for(int q=0; q<5; q++)
  						horario_resultado[j][q]=null;
 
- 				System.out.println(accion_usuario.size());
  				for(int asig_auto=0; asig_auto<accion_usuario.size(); asig_auto++){
  					seleccion_post = seleccion;
  					seleccion.add(new Asignatura(asig_disponibles.get(posicion_id(accion_usuario.get(asig_auto), asig_disponibles))));
@@ -321,7 +316,6 @@
  					insertar++;
  					asig_disponibles.remove(posicion_id(accion_usuario.get(asig_auto), asig_disponibles));
  					i=0;
- 					//actualizar_asig_disponibles(seleccion, asig_disponibles);
 
  					while(i<asig_disponibles.size()){
  						//Pasamos el horario tal como lo dejamos, en cada iteraccion se modificara el horario_resultado_live, por lo que
@@ -350,16 +344,14 @@
  		System.out.println("Este es el horario provisional: ");
  		//Muestra de resultados provisionales
  		mostrar_horario(horario_resultado);
- 		seleccion.clear();
- 		asig_finales(horario_resultado, seleccion);
 
  		//SELECCION POR PARTE DEL USUARIO
  		System.out.println("Ahora vamos a elegir entre las distintas opciones posibles. ");
  		//Comprobamos si hay diferente opciones validas de cada grupo y le pregunta al usuario cual prefiere
  		for(i=0; i<seleccion.size(); i++){ //Recorremos las asignaturas que son compatibles entre ellas.
- 			seleccionar_grupo(seleccion.get(i).get_nombre(), horario_resultado, "teoria", seleccion.get(i).grupos_teoria(), seleccion.get(i).get_teoria()); //Teoria
- 			seleccionar_grupo(seleccion.get(i).get_nombre(), horario_resultado, "seminario", seleccion.get(i).grupos_seminario(), seleccion.get(i).get_seminario()); //Seminario
- 			seleccionar_grupo(seleccion.get(i).get_nombre(), horario_resultado, "practica", seleccion.get(i).grupos_practica(), seleccion.get(i).get_practica()); //Practica
+ 			seleccionar_grupo(seleccion.get(i).getNombre(), horario_resultado, "teoria", seleccion.get(i).grupos_teoria(), seleccion.get(i).getTeoria()); //Teoria
+ 			seleccionar_grupo(seleccion.get(i).getNombre(), horario_resultado, "seminario", seleccion.get(i).grupos_seminario(), seleccion.get(i).getSeminario()); //Seminario
+ 			seleccionar_grupo(seleccion.get(i).getNombre(), horario_resultado, "practica", seleccion.get(i).grupos_practica(), seleccion.get(i).getPractica()); //Practica
  		}
 
 

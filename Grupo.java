@@ -9,15 +9,15 @@ public abstract class Grupo{
  	protected String tipoSub_;
 
  	//Observadores
- 	public double get_hora_inicio(){
+ 	public double getHora_inicio(){
  		return hora_inicio_;
  	}
 
- 	public double get_hora_fin(){
+ 	public double getHora_fin(){
  		return hora_fin_;
  	}
 
- 	public String get_tipoSub(){
+ 	public String getTipoSub(){
  		return tipoSub_;
  	}
 
@@ -25,27 +25,27 @@ public abstract class Grupo{
  		return codigoAsig_;
  	}*/
 
- 	public String get_nombre(){
+ 	public String getNombre(){
  		return nombre_grupo_;
  	}
  	/*public Asignatura asignatura(){
  		return asig_;
  	}*/
 
- 	public int get_id(){
+ 	public int getId(){
  		return id_;
  	}
 
- 	public int get_dia(){
+ 	public int getDia(){
  		return dia_;
  	}
 
  	//Modificadores
- 	public void set_hora_inicio(double hora_inicio){
+ 	public void setHora_inicio(double hora_inicio){
  		hora_inicio_ = hora_inicio;
  	}
 
- 	public void set_hora_fin(double hora_fin){
+ 	public void setHora_fin(double hora_fin){
  		hora_fin_ = hora_fin;
  	}
 
@@ -53,7 +53,7 @@ public abstract class Grupo{
  		codigoAsig_ = codigoAsig;
  	}*/
 
- 	public void set_grupo(String grupo){
+ 	public void setGrupo(String grupo){
  		nombre_grupo_ = grupo;
  	}
 }

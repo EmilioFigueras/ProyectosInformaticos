@@ -38,10 +38,10 @@ public class GruposCompatibles{
 		boolean fin = false;
 		if(grupos.size() < gruposConCoincidencia.size()){
 			asignatura_a_sobreescribir = horario_previo[k][dia];
-			horario_previo[k][dia] = asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
+			horario_previo[k][dia] = asignatura.getNombre()+" "+grupos.get(j).getNombre();
 
 			//Buscamos si hay restos de grupos ya eliminados
-			if(k==(hora_a_fila(grupos.get(j).get_hora_fin())-1)){
+			if(k==(hora_a_fila(grupos.get(j).getHora_fin())-1)){
 				while(futuro<25 && !fin){
 					if(horario_previo[futuro][dia] == null)
 						fin = true;
@@ -74,15 +74,15 @@ public class GruposCompatibles{
 		for(int j=0; j<grupos.size(); j++){ //Bucle para recorrer los grupos de teoria dentro de la asignatura seleccionada
 		 				ocupado=false;
 		 				//Recorremos el horario de este grupo
-		 				dia = grupos.get(j).get_dia(); //Dia del grupo seleccionado
+		 				dia = grupos.get(j).getDia(); //Dia del grupo seleccionado
 
 		 				//Bucle para recorrer las horas de este grupo
-		 				for(int k=hora_a_fila(grupos.get(j).get_hora_inicio()); k<hora_a_fila(grupos.get(j).get_hora_fin()); k++){
+		 				for(int k=hora_a_fila(grupos.get(j).getHora_inicio()); k<hora_a_fila(grupos.get(j).getHora_fin()); k++){
 		 					if(horario_resultado[k][dia] != null){ //Si hay una asignatura en esta posicion
 		 						String[] coincidente = horario_resultado[k][dia].split(" "); //coincidente[0] = nombre y coincidente[1] = grupo
 		 						encontrado = false;
 		 						for(int q=0; q<todas_asig.size() && encontrado==false; q++){ //Bucle para encontrar la asignatura que nos choca
-		 							if((todas_asig.get(q).get_nombre()).compareTo(coincidente[0]) == 0){
+		 							if((todas_asig.get(q).getNombre()).compareTo(coincidente[0]) == 0){
 		 								encontrado=true;
 		 								asig=q; //Posicion en el ArrayList seleccion de la asignatura que nos choca
 		 							}
@@ -92,20 +92,20 @@ public class GruposCompatibles{
 		 						encontrado=false;
 
 		 						//Ahora buscamos el subgrupo al que pertenece la asignatura que nos choca
-		 						for(int q=0; q<todas_asig.get(asig).get_teoria().size() && encontrado==false; q++){
-		 							if((todas_asig.get(asig).get_teoria().get(q).get_nombre()).compareTo(coincidente[1]) ==0){
+		 						for(int q=0; q<todas_asig.get(asig).getTeoria().size() && encontrado==false; q++){
+		 							if((todas_asig.get(asig).getTeoria().get(q).getNombre()).compareTo(coincidente[1]) ==0){
 		 								encontrado=true;
 		 								tipoSub=1;
 		 							}
 		 						}
-		 						for(int q=0; q<todas_asig.get(asig).get_practica().size() && encontrado==false; q++){
-		 							if((todas_asig.get(asig).get_practica().get(q).get_nombre()).compareTo(coincidente[1]) ==0){
+		 						for(int q=0; q<todas_asig.get(asig).getPractica().size() && encontrado==false; q++){
+		 							if((todas_asig.get(asig).getPractica().get(q).getNombre()).compareTo(coincidente[1]) ==0){
 		 								encontrado=true;
 		 								tipoSub=2;
 		 							}
 		 						}
-		 						for(int q=0; q<todas_asig.get(asig).get_seminario().size() && encontrado==false; q++){
-		 							if((todas_asig.get(asig).get_seminario().get(q).get_nombre()).compareTo(coincidente[1]) ==0){
+		 						for(int q=0; q<todas_asig.get(asig).getSeminario().size() && encontrado==false; q++){
+		 							if((todas_asig.get(asig).getSeminario().get(q).getNombre()).compareTo(coincidente[1]) ==0){
 		 								encontrado=true;
 		 								tipoSub=3;
 		 							}
@@ -113,23 +113,23 @@ public class GruposCompatibles{
 
 
 		 						if(tipoSub==1)
-		 							buscarGrupo(todas_asig.get(asig).get_teoria(), grupos, coincidente, k, horario_previo, j);
+		 							buscarGrupo(todas_asig.get(asig).getTeoria(), grupos, coincidente, k, horario_previo, j);
 
 		 						if(tipoSub==2)
-		 							buscarGrupo(todas_asig.get(asig).get_practica(), grupos, coincidente, k, horario_previo, j);
+		 							buscarGrupo(todas_asig.get(asig).getPractica(), grupos, coincidente, k, horario_previo, j);
 
 
 		 						if(tipoSub==3)
-		 							if(todas_asig.get(asig).get_seminario().size() !=0)
-		 								buscarGrupo(todas_asig.get(asig).get_seminario(), grupos, coincidente, k, horario_previo, j);
+		 							if(todas_asig.get(asig).getSeminario().size() !=0)
+		 								buscarGrupo(todas_asig.get(asig).getSeminario(), grupos, coincidente, k, horario_previo, j);
 															
 		 					}//fin if horario_resultado != null
 		 				}//fin for k
 
 		 				//Si hay espacio libre pues la agregamos a la matriz previa, a la espera de que haya espacio tambien para el resto de horas de este grupo
 		 				if(ocupado==false){
-		 					for(int k=hora_a_fila(grupos.get(j).get_hora_inicio()); k<hora_a_fila(grupos.get(j).get_hora_fin()); k++){
-		 						horario_previo[k][dia]=asignatura.get_nombre()+" "+grupos.get(j).get_nombre();
+		 					for(int k=hora_a_fila(grupos.get(j).getHora_inicio()); k<hora_a_fila(grupos.get(j).getHora_fin()); k++){
+		 						horario_previo[k][dia]=asignatura.getNombre()+" "+grupos.get(j).getNombre();
 		 					}
 		 				}
 		}//fin for j}
